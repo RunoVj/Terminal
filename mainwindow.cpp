@@ -14,9 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     console = new Console;
-//    setCentralWidget(console);
-
-    console->stackUnder(ui->widget);
+    console->show();
 
 
     serial = new QSerialPort(this);
@@ -122,13 +120,18 @@ void MainWindow::showStatusMessage(const QString &message)
 void MainWindow::on_verticalSliderVelocity_valueChanged(int value)
 {
     QByteArray byte_arr;
-    byte_arr.setNum(value);
+    byte_arr.resize(2);
+    byte_arr[0] = 0x01;
+    byte_arr[1] = value;
+
     MainWindow::writeData(byte_arr);
 }
 
 void MainWindow::on_verticalSliderFrequency_valueChanged(int value)
 {
     QByteArray byte_arr;
-    byte_arr.setNum(value);
+    byte_arr.resize(2);
+    byte_arr[0] = 0x02;
+    byte_arr[1] = value;
     MainWindow::writeData(byte_arr);
 }

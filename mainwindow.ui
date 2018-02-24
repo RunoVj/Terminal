@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>793</width>
+    <height>630</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,7 +37,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>670</x>
@@ -51,6 +51,9 @@
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QSlider" name="verticalSliderVelocity">
+         <property name="maximum">
+          <number>255</number>
+         </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -58,11 +61,17 @@
        </item>
        <item>
         <widget class="QSlider" name="verticalSliderFrequency">
+         <property name="maximum">
+          <number>255</number>
+         </property>
          <property name="singleStep">
-          <number>3</number>
+          <number>1</number>
          </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
+         </property>
+         <property name="invertedAppearance">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -86,7 +95,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>793</width>
      <height>21</height>
     </rect>
    </property>
@@ -194,6 +203,38 @@
     <hint type="destinationlabel">
      <x>685</x>
      <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>verticalSliderFrequency</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxFrequency</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>750</x>
+     <y>372</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>771</x>
+     <y>598</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxFrequency</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>verticalSliderFrequency</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>745</x>
+     <y>591</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>756</x>
+     <y>522</y>
     </hint>
    </hints>
   </connection>
