@@ -11,14 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Terminal by Ilya Litik</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="sendButton">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>210</y>
+      <x>560</x>
+      <y>530</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -41,9 +41,9 @@
     <property name="geometry">
      <rect>
       <x>670</x>
-      <y>0</y>
+      <y>50</y>
       <width>121</width>
-      <height>551</height>
+      <height>501</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -61,10 +61,16 @@
        </item>
        <item>
         <widget class="QSlider" name="verticalSliderFrequency">
+         <property name="minimum">
+          <number>1</number>
+         </property>
          <property name="maximum">
-          <number>255</number>
+          <number>6</number>
          </property>
          <property name="singleStep">
+          <number>1</number>
+         </property>
+         <property name="pageStep">
           <number>1</number>
          </property>
          <property name="orientation">
@@ -80,14 +86,54 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QSpinBox" name="spinBoxVelocity"/>
+        <widget class="QSpinBox" name="spinBoxVelocity">
+         <property name="minimum">
+          <number>-127</number>
+         </property>
+         <property name="maximum">
+          <number>128</number>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="spinBoxFrequency"/>
+        <widget class="QSpinBox" name="spinBoxFrequency">
+         <property name="minimum">
+          <number>-127</number>
+         </property>
+         <property name="maximum">
+          <number>128</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>10</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Velocity</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>10</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Position</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -191,38 +237,6 @@
  </resources>
  <connections>
   <connection>
-   <sender>verticalSliderVelocity</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxVelocity</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>702</x>
-     <y>267</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>685</x>
-     <y>597</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>verticalSliderFrequency</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxFrequency</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>750</x>
-     <y>372</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>771</x>
-     <y>598</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>spinBoxFrequency</sender>
    <signal>valueChanged(int)</signal>
    <receiver>verticalSliderFrequency</receiver>
@@ -235,6 +249,22 @@
     <hint type="destinationlabel">
      <x>756</x>
      <y>522</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>verticalSliderFrequency</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxFrequency</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>748</x>
+     <y>414</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>768</x>
+     <y>600</y>
     </hint>
    </hints>
   </connection>

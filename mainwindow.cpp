@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     console = new Console;
-    console->show();
+    //console->show();
 
 
     serial = new QSerialPort(this);
@@ -35,6 +35,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &MainWindow::handleError);
     connect(serial, &QSerialPort::readyRead, this, &MainWindow::readData);
     connect(console, &Console::getData, this, &MainWindow::writeData);
+//    connect(ui->verticalSliderVelocity, SIGNAL(valueChanged(int)), this, SLOT(on_velocitySpinBox_valueChange(int)));
+    connect(ui->verticalSliderVelocity, &QSlider::valueChanged, [this](int value){ui->spinBoxVelocity->setValue(value-127);});
 }
 
 MainWindow::~MainWindow()
@@ -87,7 +89,8 @@ void MainWindow::writeData(const QByteArray &data)
 void MainWindow::readData()
 {
     QByteArray data = serial->readAll();
-//    console->putData(data);
+
+    console->putData(data);
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
@@ -119,19 +122,17 @@ void MainWindow::showStatusMessage(const QString &message)
 
 void MainWindow::on_verticalSliderVelocity_valueChanged(int value)
 {
-    QByteArray byte_arr;
-    byte_arr.resize(2);
-    byte_arr[0] = 0x01;
-    byte_arr[1] = value;
+    uint8_t msg_buf[2];
+    msg_buf[0] = 1;
+    msg_buf[1] = value;
 
-    MainWindow::writeData(byte_arr);
+    MainWindow::writeData((char*)msg_buf);
 }
 
 void MainWindow::on_verticalSliderFrequency_valueChanged(int value)
 {
-    QByteArray byte_arr;
-    byte_arr.resize(2);
-    byte_arr[0] = 0x02;
-    byte_arr[1] = value;
-    MainWindow::writeData(byte_arr);
+    uint8_t msg_buf[2];
+    msg_buf[0] = 2;
+    msg_buf[1] = value;
+    MainWindow::writeData((char*)msg_buf);
 }
