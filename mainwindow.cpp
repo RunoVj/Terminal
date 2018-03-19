@@ -129,10 +129,18 @@ void MainWindow::on_verticalSliderVelocity_valueChanged(int value)
     MainWindow::writeData((char*)msg_buf);
 }
 
-void MainWindow::on_verticalSliderFrequency_valueChanged(int value)
+void MainWindow::on_verticalSliderPosition_valueChanged(int value)
 {
     uint8_t msg_buf[2];
     msg_buf[0] = 2;
+    msg_buf[1] = value;
+    MainWindow::writeData((char*)msg_buf);
+}
+
+void MainWindow::on_verticalSliderFrequency_valueChanged(int value)
+{
+    uint8_t msg_buf[2];
+    msg_buf[0] = 3;
     msg_buf[1] = value;
     MainWindow::writeData((char*)msg_buf);
 }

@@ -17,7 +17,7 @@
    <widget class="QPushButton" name="sendButton">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>0</x>
       <y>530</y>
       <width>75</width>
       <height>23</height>
@@ -37,18 +37,53 @@
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>670</x>
-      <y>50</y>
-      <width>121</width>
-      <height>501</height>
+      <x>630</x>
+      <y>10</y>
+      <width>153</width>
+      <height>541</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Frequency</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Velocity</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Position</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QSlider" name="verticalSliderFrequency">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QSlider" name="verticalSliderVelocity">
          <property name="maximum">
@@ -60,7 +95,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSliderFrequency">
+        <widget class="QSlider" name="verticalSliderPosition">
          <property name="minimum">
           <number>1</number>
          </property>
@@ -86,6 +121,16 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
+        <widget class="QSpinBox" name="spinBoxFrequency">
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QSpinBox" name="spinBoxVelocity">
          <property name="minimum">
           <number>-127</number>
@@ -96,7 +141,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="spinBoxFrequency">
+        <widget class="QSpinBox" name="spinBoxPosition">
          <property name="minimum">
           <number>-127</number>
          </property>
@@ -108,32 +153,6 @@
       </layout>
      </item>
     </layout>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>10</y>
-      <width>41</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Velocity</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>740</x>
-      <y>10</y>
-      <width>41</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Position</string>
-    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -237,9 +256,9 @@
  </resources>
  <connections>
   <connection>
-   <sender>spinBoxFrequency</sender>
+   <sender>spinBoxPosition</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>verticalSliderFrequency</receiver>
+   <receiver>verticalSliderPosition</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -253,9 +272,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>verticalSliderFrequency</sender>
+   <sender>verticalSliderPosition</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>spinBoxFrequency</receiver>
+   <receiver>spinBoxPosition</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -265,6 +284,38 @@
     <hint type="destinationlabel">
      <x>768</x>
      <y>600</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>verticalSliderFrequency</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBoxFrequency</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>659</x>
+     <y>376</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>648</x>
+     <y>593</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxFrequency</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>verticalSliderFrequency</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>635</x>
+     <y>594</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>657</x>
+     <y>440</y>
     </hint>
    </hints>
   </connection>

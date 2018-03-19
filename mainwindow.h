@@ -41,6 +41,8 @@ private slots:
 
     void on_verticalSliderFrequency_valueChanged(int value);
 
+    void on_verticalSliderPosition_valueChanged(int value);
+
 private:
     void initActionsConnections();
     void showStatusMessage(const QString &message);
