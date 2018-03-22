@@ -50,7 +50,6 @@ private:
     Ui::MainWindow *ui;
 
     QLabel *status;
-    Console *console;
     SettingsDialog *settings;
     QSerialPort *serial;
 };

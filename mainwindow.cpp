@@ -13,9 +13,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    console = new Console;
-    //console->show();
-
 
     serial = new QSerialPort(this);
     settings = new SettingsDialog;
@@ -34,8 +31,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
             this, &MainWindow::handleError);
     connect(serial, &QSerialPort::readyRead, this, &MainWindow::readData);
-    connect(console, &Console::getData, this, &MainWindow::writeData);
-//    connect(ui->verticalSliderVelocity, SIGNAL(valueChanged(int)), this, SLOT(on_velocitySpinBox_valueChange(int)));
     connect(ui->verticalSliderVelocity, &QSlider::valueChanged, [this](int value){ui->spinBoxVelocity->setValue(value-127);});
 }
 
@@ -55,8 +50,6 @@ void MainWindow::openSerialPort()
     serial->setStopBits(p.stopBits);
     serial->setFlowControl(p.flowControl);
     if (serial->open(QIODevice::ReadWrite)) {
-        console->setEnabled(true);
-        console->setLocalEchoEnabled(p.localEchoEnabled);
         ui->actionConnect->setEnabled(false);
         ui->actionDisconnect->setEnabled(true);
         ui->actionConfigure->setEnabled(false);
@@ -74,7 +67,6 @@ void MainWindow::closeSerialPort()
 {
     if (serial->isOpen())
         serial->close();
-    console->setEnabled(false);
     ui->actionConnect->setEnabled(true);
     ui->actionDisconnect->setEnabled(false);
     ui->actionConfigure->setEnabled(true);
@@ -90,7 +82,10 @@ void MainWindow::readData()
 {
     QByteArray data = serial->readAll();
 
-    console->putData(data);
+    data.remove(data.size()-1, 1);
+
+    ui->plainTextEditReceive->appendPlainText(data.toHex());
+
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
@@ -107,7 +102,6 @@ void MainWindow::initActionsConnections()
     connect(ui->actionDisconnect, &QAction::triggered, this, &MainWindow::closeSerialPort);
     connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::close);
     connect(ui->actionConfigure, &QAction::triggered, settings, &SettingsDialog::show);
-    connect(ui->actionClear, &QAction::triggered, console, &Console::clear);
 }
 
 void MainWindow::on_actionQuit_triggered()
