@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QtSerialPort/QSerialPort>
+#include <QDebug>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -16,8 +17,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     serial = new QSerialPort(this);
     settings = new SettingsDialog;
+    send_timer = new QTimer(this);
 
-    ui->sendButton->setEnabled(false);
+
+
     ui->actionConnect->setEnabled(true);
     ui->actionDisconnect->setEnabled(false);
     ui->actionQuit->setEnabled(true);
@@ -28,10 +31,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusbar->addWidget(status);
 
     initActionsConnections();
-    connect(serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
-            this, &MainWindow::handleError);
-    connect(serial, &QSerialPort::readyRead, this, &MainWindow::readData);
-    connect(ui->verticalSliderVelocity, &QSlider::valueChanged, [this](int value){ui->spinBoxVelocity->setValue(value-127);});
 }
 
 MainWindow::~MainWindow()
@@ -56,6 +55,7 @@ void MainWindow::openSerialPort()
         showStatusMessage(tr("Connected to %1 : %2, %3, %4, %5, %6")
                           .arg(p.name).arg(p.stringBaudRate).arg(p.stringDataBits)
                           .arg(p.stringParity).arg(p.stringStopBits).arg(p.stringFlowControl));
+        send_timer->start(REQUEST_DELAY);
     } else {
         QMessageBox::critical(this, tr("Error"), serial->errorString());
 
@@ -71,6 +71,7 @@ void MainWindow::closeSerialPort()
     ui->actionDisconnect->setEnabled(false);
     ui->actionConfigure->setEnabled(true);
     showStatusMessage(tr("Disconnected"));
+    send_timer->stop();
 }
 
 void MainWindow::writeData(const QByteArray &data)
@@ -78,14 +79,52 @@ void MainWindow::writeData(const QByteArray &data)
     serial->write(data);
 }
 
+void MainWindow::request()
+{    
+    QByteArray msg_buf;
+    msg_buf[VMA_DEV_REQUEST_AA1] = 0xAA;
+    msg_buf[VMA_DEV_REQUEST_AA2] = 0x01;
+    msg_buf[VMA_DEV_REQUEST_ADDRESS] = position_setting;
+    msg_buf[VMA_DEV_REQUEST_SETTING] = position;
+    msg_buf[VMA_DEV_REQUEST_VELOCITY1] = pwm_duty;
+    msg_buf[VMA_DEV_REQUEST_VELOCITY2] = period;
+    msg_buf[VMA_DEV_REQUEST_CHECKSUM] = 0xFF;
+
+
+    serial->clear(QSerialPort::Input);
+    MainWindow::writeData(msg_buf);
+
+    MainWindow::readData();
+}
+
 void MainWindow::readData()
-{
-    QByteArray data = serial->readAll();
+{    
+    //Если получен ответ в течение зад.времени
+    QByteArray responseData;
+    if (serial->waitForReadyRead(10)){
+        responseData = serial->readAll();
+        while (serial->waitForReadyRead(10)){
+            responseData += serial->readAll();
+        }
+    }
+    qDebug() << "read bytes - " << responseData.toHex();
+    ui->plainTextEditReceive->appendPlainText(responseData.toHex());
 
-    data.remove(data.size()-1, 1);
+    //Если получен ответ в течение зад.времени
+//    QByteArray responseData;
+//    if (serial->waitForReadyRead(5)){
+//        responseData = serial->readAll();
+////        while (serial->waitForReadyRead(5)){
+////            responseData += serial->readAll();
+////        }
+//    }
+//    qDebug() << "read bytes size - " << responseData.size() << "data - " <<  responseData.toHex();
+//    qDebug() << "response data - " << responseData;
+//    ui->plainTextEditReceive->appendPlainText(responseData.toHex());
 
-    ui->plainTextEditReceive->appendPlainText(data.toHex());
-
+//    QByteArray responseData = serial->readAll();
+//    qDebug() << responseData;
+//    ui->plainTextEditReceive->appendPlainText(responseData.toHex());
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
@@ -102,6 +141,16 @@ void MainWindow::initActionsConnections()
     connect(ui->actionDisconnect, &QAction::triggered, this, &MainWindow::closeSerialPort);
     connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::close);
     connect(ui->actionConfigure, &QAction::triggered, settings, &SettingsDialog::show);
+    connect(ui->actionClear, &QAction::triggered, [this](void){ui->plainTextEditReceive->clear();});
+    connect(ui->actionClear, &QAction::triggered, [this](void){ui->plainTextEditTransmit->clear();});
+
+    connect(send_timer, &QTimer::timeout, this, &MainWindow::request);
+    connect(serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+            this, &MainWindow::handleError);
+//    connect(serial, &QSerialPort::readyRead, this, &MainWindow::readData);
+    connect(ui->verticalSliderVelocity, &QSlider::valueChanged,
+            [this](int value){ui->spinBoxVelocity->setValue(value-127);});
+    connect(ui->radioButton, &QRadioButton::toggled, [this](bool permission){position_setting = permission;});
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -116,25 +165,18 @@ void MainWindow::showStatusMessage(const QString &message)
 
 void MainWindow::on_verticalSliderVelocity_valueChanged(int value)
 {
-    uint8_t msg_buf[2];
-    msg_buf[0] = 1;
-    msg_buf[1] = value;
-
-    MainWindow::writeData((char*)msg_buf);
+    pwm_duty = value;
+    qDebug() << "pwm duty = " << pwm_duty << "\n";
 }
 
 void MainWindow::on_verticalSliderPosition_valueChanged(int value)
 {
-    uint8_t msg_buf[2];
-    msg_buf[0] = 2;
-    msg_buf[1] = value;
-    MainWindow::writeData((char*)msg_buf);
+    position = value;
+    qDebug() << "position = " << position << "\n";
 }
 
 void MainWindow::on_verticalSliderFrequency_valueChanged(int value)
 {
-    uint8_t msg_buf[2];
-    msg_buf[0] = 3;
-    msg_buf[1] = value;
-    MainWindow::writeData((char*)msg_buf);
+    period = value;
+    qDebug() << "period = " << period << "\n";
 }

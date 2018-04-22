@@ -31,7 +31,8 @@ SOURCES += \
 
 HEADERS += \
     mainwindow.h \
-    settingsdialog.h
+    settingsdialog.h \
+    messages.h
 
 FORMS += \
     mainwindow.ui \

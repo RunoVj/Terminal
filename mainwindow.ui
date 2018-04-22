@@ -14,24 +14,51 @@
    <string>Terminal by Ilya Litik</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="sendButton">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>530</y>
-      <width>75</width>
-      <height>23</height>
+      <x>9</x>
+      <y>9</y>
+      <width>611</width>
+      <height>251</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Send</string>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Receive</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Transmit</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QPlainTextEdit" name="plainTextEditReceive"/>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="plainTextEditTransmit"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>10</y>
+      <x>633</x>
+      <y>9</y>
       <width>153</width>
       <height>541</height>
      </rect>
@@ -165,42 +192,63 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>571</width>
-      <height>371</height>
+      <x>390</x>
+      <y>280</y>
+      <width>232</width>
+      <height>52</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Receive</string>
+          <string>Current gray code</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Transmit</string>
+        <widget class="QLineEdit" name="lineEditGrayCode">
+         <property name="readOnly">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
        <item>
-        <widget class="QPlainTextEdit" name="plainTextEditReceive"/>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Current state        </string>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="plainTextEditTransmit"/>
+        <widget class="QLineEdit" name="lineEditState">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
     </layout>
+   </widget>
+   <widget class="QRadioButton" name="radioButton">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>380</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Setting position</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
