@@ -88,8 +88,17 @@ void MainWindow::request()
     msg_buf[VMA_DEV_REQUEST_SETTING] = position;
     msg_buf[VMA_DEV_REQUEST_VELOCITY1] = pwm_duty;
     msg_buf[VMA_DEV_REQUEST_VELOCITY2] = period;
-    msg_buf[VMA_DEV_REQUEST_CHECKSUM] = 0xFF;
 
+    uint8_t crc = 0;
+
+    for(int i = 0; i < VMA_DEV_REQUEST_LENGTH - 1; i++){
+        crc ^= msg_buf[i];
+    }
+
+    msg_buf[VMA_DEV_REQUEST_CHECKSUM] = crc;
+
+
+    ui->plainTextEditTransmit->appendPlainText(msg_buf.toHex());
 
     serial->clear(QSerialPort::Input);
     MainWindow::writeData(msg_buf);
@@ -97,34 +106,23 @@ void MainWindow::request()
     MainWindow::readData();
 }
 
+
 void MainWindow::readData()
 {    
-    //Если получен ответ в течение зад.времени
-    QByteArray responseData;
-    if (serial->waitForReadyRead(10)){
-        responseData = serial->readAll();
-        while (serial->waitForReadyRead(10)){
-            responseData += serial->readAll();
-        }
+    QByteArray data;
+    if (serial->waitForReadyRead(REQUEST_DELAY)){
+        data = serial->readAll();
+        qDebug() << "read bytes - " << data.toHex();
     }
-    qDebug() << "read bytes - " << responseData.toHex();
-    ui->plainTextEditReceive->appendPlainText(responseData.toHex());
+    ui->plainTextEditReceive->appendPlainText(data.toHex());
+    ui->plainTextEditHistory->appendPlainText(QString::number(data[VMA_DEV_RESPONSE_CURRENT_2L]));
 
-    //Если получен ответ в течение зад.времени
-//    QByteArray responseData;
-//    if (serial->waitForReadyRead(5)){
-//        responseData = serial->readAll();
-////        while (serial->waitForReadyRead(5)){
-////            responseData += serial->readAll();
-////        }
-//    }
-//    qDebug() << "read bytes size - " << responseData.size() << "data - " <<  responseData.toHex();
-//    qDebug() << "response data - " << responseData;
-//    ui->plainTextEditReceive->appendPlainText(responseData.toHex());
+    ui->lineEditAddress->setText(QString::number(data[VMA_DEV_RESPONSE_ADDRESS]));
+    ui->lineEditCurrent->setText(QString::number((uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1H] << 8 | (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1L])));
+    ui->lineEditCommutationPeriod->setText(QString::number((uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_VELOCITY1] << 8 | (uint8_t)data[VMA_DEV_RESPONSE_VELOCITY2])));
+    ui->lineEditState->setText(QString::number(data[VMA_DEV_RESPONSE_CURRENT_2L]));
+    ui->lineEditGrayCode->setText(QString::number(data[VMA_DEV_RESPONSE_CURRENT_2H]));
 
-//    QByteArray responseData = serial->readAll();
-//    qDebug() << responseData;
-//    ui->plainTextEditReceive->appendPlainText(responseData.toHex());
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
@@ -147,7 +145,6 @@ void MainWindow::initActionsConnections()
     connect(send_timer, &QTimer::timeout, this, &MainWindow::request);
     connect(serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
             this, &MainWindow::handleError);
-//    connect(serial, &QSerialPort::readyRead, this, &MainWindow::readData);
     connect(ui->verticalSliderVelocity, &QSlider::valueChanged,
             [this](int value){ui->spinBoxVelocity->setValue(value-127);});
     connect(ui->radioButton, &QRadioButton::toggled, [this](bool permission){position_setting = permission;});
