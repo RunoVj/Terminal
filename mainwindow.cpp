@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "console.h"
 #include "settingsdialog.h"
 
 #include <QLabel>
@@ -53,8 +52,9 @@ void MainWindow::openSerialPort()
         ui->actionDisconnect->setEnabled(true);
         ui->actionConfigure->setEnabled(false);
         showStatusMessage(tr("Connected to %1 : %2, %3, %4, %5, %6")
-                          .arg(p.name).arg(p.stringBaudRate).arg(p.stringDataBits)
-                          .arg(p.stringParity).arg(p.stringStopBits).arg(p.stringFlowControl));
+                          .arg(p.name).arg(p.stringBaudRate)
+                          .arg(p.stringDataBits).arg(p.stringParity)
+                          .arg(p.stringStopBits).arg(p.stringFlowControl));
         send_timer->start(REQUEST_DELAY);
     } else {
         QMessageBox::critical(this, tr("Error"), serial->errorString());
@@ -119,46 +119,91 @@ void MainWindow::readData()
     static uint8_t previous_state;
     if (previous_state != (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2L]){
         previous_state = (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2L];
-        ui->plainTextEditHistory->appendPlainText(QString::number(previous_state));
+        ui->plainTextEditHistory->appendPlainText(
+                    QString::number(previous_state));
     }
 
-    ui->lineEditAddress->setText(QString::number(data[VMA_DEV_RESPONSE_ADDRESS]));
-    ui->lineEditCurrent->setText(QString::number((uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1H] << 8 | (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1L])));
-    ui->lineEditCommutationPeriod->setText(QString::number((uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_VELOCITY1] << 8 | (uint8_t)data[VMA_DEV_RESPONSE_VELOCITY2])));
-    ui->lineEditState->setText(QString::number(data[VMA_DEV_RESPONSE_CURRENT_2L]));
+    ui->lineEditAddress->setText(
+                QString::number(data[VMA_DEV_RESPONSE_ADDRESS]));
+    ui->lineEditCurrent->setText(
+                QString::number(
+                    (uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1H] << 8 |
+                               (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1L])));
+    ui->lineEditCommutationPeriod->setText(
+                QString::number(
+                    (uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_VELOCITY1] << 8 |
+                               (uint8_t)data[VMA_DEV_RESPONSE_VELOCITY2])));
+    ui->lineEditState->setText(
+                QString::number(data[VMA_DEV_RESPONSE_CURRENT_2L]));
 
-    ui->radioButtonSensorA->setDown((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000001);
-    ui->radioButtonSensorB->setDown((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000010);
-    ui->radioButtonSensorC->setDown((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000100);
+    ui->radioButtonSensorA->setDown(
+                (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000001);
+    ui->radioButtonSensorB->setDown(
+                (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000010);
+    ui->radioButtonSensorC->setDown(
+                (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000100);
 
 
-    ui->lineEditGrayCode->setText(QString::number(data[VMA_DEV_RESPONSE_CURRENT_2H]));
+    ui->lineEditGrayCode->setText(
+                QString::number(data[VMA_DEV_RESPONSE_CURRENT_2H]));
 
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
 {
     if (error == QSerialPort::ResourceError) {
-        QMessageBox::critical(this, tr("Critical Error"), serial->errorString());
+        QMessageBox::critical(this, tr("Critical Error"),
+                              serial->errorString());
         closeSerialPort();
     }
 }
 
 void MainWindow::initActionsConnections()
 {
-    connect(ui->actionConnect, &QAction::triggered, this, &MainWindow::openSerialPort);
-    connect(ui->actionDisconnect, &QAction::triggered, this, &MainWindow::closeSerialPort);
-    connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::close);
-    connect(ui->actionConfigure, &QAction::triggered, settings, &SettingsDialog::show);
-    connect(ui->actionClear, &QAction::triggered, [this](void){ui->plainTextEditReceive->clear();});
-    connect(ui->actionClear, &QAction::triggered, [this](void){ui->plainTextEditTransmit->clear();});
+    connect(ui->actionConnect, &QAction::triggered,
+            this, &MainWindow::openSerialPort);
+    connect(ui->actionDisconnect, &QAction::triggered,
+            this, &MainWindow::closeSerialPort);
+    connect(ui->actionQuit, &QAction::triggered,
+            this, &MainWindow::close);
+    connect(ui->actionConfigure, &QAction::triggered,
+            settings, &SettingsDialog::show);
+    connect(ui->actionClear, &QAction::triggered,
+            [this](void){ui->plainTextEditReceive->clear();});
+    connect(ui->actionClear, &QAction::triggered,
+            [this](void){ui->plainTextEditTransmit->clear();});
 
-    connect(send_timer, &QTimer::timeout, this, &MainWindow::request);
-    connect(serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
-            this, &MainWindow::handleError);
+    connect(ui->verticalSliderFrequency, &QSlider::valueChanged,
+            ui->spinBoxFrequency, &QSpinBox::setValue);
     connect(ui->verticalSliderVelocity, &QSlider::valueChanged,
             [this](int value){ui->spinBoxVelocity->setValue(value-127);});
-    connect(ui->radioButton, &QRadioButton::toggled, [this](bool permission){position_setting = permission;});
+    connect(ui->dial, &QDial::valueChanged,
+            ui->spinBoxPosition, &QSpinBox::setValue);
+
+    connect(ui->spinBoxFrequency,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            ui->verticalSliderFrequency, &QSlider::setValue);
+    connect(ui->spinBoxVelocity,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            [this](int value){ui->verticalSliderVelocity->setValue(value +
+                                                                   127);});
+    connect(ui->spinBoxPosition,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            [this](int value){ui->dial->setValue(value);});
+
+    connect(send_timer, &QTimer::timeout, this, &MainWindow::request);
+    connect(serial,
+            static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>
+            (&QSerialPort::error), this, &MainWindow::handleError);
+
+    connect(ui->radioButton, &QRadioButton::toggled,
+            [this](bool permission)
+    {
+        position_setting = permission;
+        ui->dial->setEnabled(permission);
+        ui->spinBoxPosition->setEnabled(permission);
+
+    });
 }
 
 void MainWindow::on_actionQuit_triggered()

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>790</width>
-    <height>625</height>
+    <width>741</width>
+    <height>616</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,10 +63,10 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>633</x>
-      <y>9</y>
-      <width>153</width>
-      <height>541</height>
+      <x>620</x>
+      <y>10</y>
+      <width>121</width>
+      <height>531</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -83,13 +83,6 @@
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Velocity</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Position</string>
          </property>
         </widget>
        </item>
@@ -129,28 +122,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QSlider" name="verticalSliderPosition">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>6</number>
-         </property>
-         <property name="singleStep">
-          <number>1</number>
-         </property>
-         <property name="pageStep">
-          <number>1</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="invertedAppearance">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>
@@ -178,38 +149,9 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QSpinBox" name="spinBoxPosition">
-         <property name="minimum">
-          <number>-127</number>
-         </property>
-         <property name="maximum">
-          <number>128</number>
-         </property>
-         <property name="value">
-          <number>1</number>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
     </layout>
-   </widget>
-   <widget class="QRadioButton" name="radioButton">
-    <property name="geometry">
-     <rect>
-      <x>460</x>
-      <y>290</y>
-      <width>101</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Setting position</string>
-    </property>
-    <property name="autoExclusive">
-     <bool>false</bool>
-    </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
@@ -520,6 +462,9 @@
     </layout>
    </widget>
    <widget class="QDial" name="dial">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>400</x>
@@ -544,14 +489,63 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>292</y>
+      <width>191</width>
+      <height>46</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_7">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Position</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_14">
+       <item>
+        <widget class="QRadioButton" name="radioButton">
+         <property name="text">
+          <string>Setting position</string>
+         </property>
+         <property name="autoExclusive">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBoxPosition">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimum">
+          <number>-127</number>
+         </property>
+         <property name="maximum">
+          <number>128</number>
+         </property>
+         <property name="value">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>790</width>
-     <height>21</height>
+     <width>741</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCalls">
@@ -644,134 +638,5 @@
  <resources>
   <include location="terminal.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>spinBoxPosition</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>verticalSliderPosition</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>745</x>
-     <y>591</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>756</x>
-     <y>522</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>verticalSliderPosition</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxPosition</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>748</x>
-     <y>414</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>768</x>
-     <y>589</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>verticalSliderFrequency</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxFrequency</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>659</x>
-     <y>376</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>648</x>
-     <y>593</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxFrequency</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>verticalSliderFrequency</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>635</x>
-     <y>589</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>657</x>
-     <y>440</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>verticalSliderPosition</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>dial</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>746</x>
-     <y>464</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>552</x>
-     <y>478</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBoxPosition</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>dial</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>743</x>
-     <y>591</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>555</x>
-     <y>533</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>dial</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>verticalSliderPosition</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>569</x>
-     <y>403</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>753</x>
-     <y>362</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>dial</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBoxPosition</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>579</x>
-     <y>577</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>767</x>
-     <y>591</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
