@@ -98,7 +98,7 @@ void MainWindow::request()
     msg_buf[VMA_DEV_REQUEST_CHECKSUM] = crc;
 
 
-    ui->plainTextEditTransmit->appendPlainText(msg_buf.toHex());
+    ui->plainTextEditTransmit->appendPlainText(msg_buf.toHex().toUpper());
 
     serial->clear(QSerialPort::Input);
     MainWindow::writeData(msg_buf);
@@ -114,13 +114,24 @@ void MainWindow::readData()
         data = serial->readAll();
         qDebug() << "read bytes - " << data.toHex();
     }
-    ui->plainTextEditReceive->appendPlainText(data.toHex());
-    ui->plainTextEditHistory->appendPlainText(QString::number(data[VMA_DEV_RESPONSE_CURRENT_2L]));
+    ui->plainTextEditReceive->appendPlainText(data.toHex().toUpper());
+
+    static uint8_t previous_state;
+    if (previous_state != (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2L]){
+        previous_state = (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2L];
+        ui->plainTextEditHistory->appendPlainText(QString::number(previous_state));
+    }
 
     ui->lineEditAddress->setText(QString::number(data[VMA_DEV_RESPONSE_ADDRESS]));
     ui->lineEditCurrent->setText(QString::number((uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1H] << 8 | (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1L])));
     ui->lineEditCommutationPeriod->setText(QString::number((uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_VELOCITY1] << 8 | (uint8_t)data[VMA_DEV_RESPONSE_VELOCITY2])));
     ui->lineEditState->setText(QString::number(data[VMA_DEV_RESPONSE_CURRENT_2L]));
+
+    ui->radioButtonSensorA->setDown((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000001);
+    ui->radioButtonSensorB->setDown((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000010);
+    ui->radioButtonSensorC->setDown((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000100);
+
+
     ui->lineEditGrayCode->setText(QString::number(data[VMA_DEV_RESPONSE_CURRENT_2H]));
 
 }
