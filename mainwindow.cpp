@@ -189,7 +189,11 @@ void MainWindow::initActionsConnections()
                                                                    127);});
     connect(ui->spinBoxPosition,
             static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            [this](int value){ui->dial->setValue(value);});
+            [this](int value)
+    {
+        ui->dial->setValue(value);
+        position = value;
+    });
 
     connect(send_timer, &QTimer::timeout, this, &MainWindow::request);
     connect(serial,
