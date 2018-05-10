@@ -18,6 +18,10 @@ MainWindow::MainWindow(QWidget *parent) :
     settings = new SettingsDialog;
     send_timer = new QTimer(this);
 
+    position_setting = 0;
+    position = 0;
+    pwm_duty = ui->verticalSliderVelocity->value();
+    period = ui->verticalSliderFrequency->value();
 
 
     ui->actionConnect->setEnabled(true);
