@@ -85,22 +85,32 @@ void MainWindow::writeData(const QByteArray &data)
 
 void MainWindow::request()
 {    
+    // fill request structure
+    Request req;
+    req.AA = 0xAA;
+    req.type = 0x01;
+    req.address = 0x01;
+    req.update_base_vector = ui->radioButtonCorrection->isChecked();
+    req.position_setting = ui->radioButtonPosition->isChecked();
+    req.angle = ui->dialAngle->value();
+    req.velocity = ui->verticalSliderVelocity->value();
+    req.frequency = ui->verticalSliderFrequency->value();
+
+    req.outrunning_angle = ui->dialOutrunningAngle->value();
+    req.update_base_vector = ui->radioButtonCorrection->isChecked();
+
+    // move to QByteArray
     QByteArray msg_buf;
-    msg_buf[VMA_DEV_REQUEST_AA1] = 0xAA;
-    msg_buf[VMA_DEV_REQUEST_AA2] = 0x01;
-    msg_buf[VMA_DEV_REQUEST_ADDRESS] = position_setting;
-    msg_buf[VMA_DEV_REQUEST_SETTING] = position;
-    msg_buf[VMA_DEV_REQUEST_VELOCITY1] = pwm_duty;
-    msg_buf[VMA_DEV_REQUEST_VELOCITY2] = period;
+    QDataStream stream(&msg_buf, QIODevice::Append);
+    stream << req;
 
     uint8_t crc = 0;
 
-    for(int i = 0; i < VMA_DEV_REQUEST_LENGTH - 1; i++){
+    for (int i = 0; i < REQUEST_SIZE - 1; i++){
         crc ^= msg_buf[i];
     }
 
-    msg_buf[VMA_DEV_REQUEST_CHECKSUM] = crc;
-
+    stream << crc;
 
     ui->plainTextEditTransmit->appendPlainText(msg_buf.toHex().toUpper());
 
@@ -113,43 +123,43 @@ void MainWindow::request()
 
 void MainWindow::readData()
 {    
-    QByteArray data;
-    if (serial->waitForReadyRead(REQUEST_DELAY)){
-        data = serial->readAll();
-        qDebug() << "read bytes - " << data.toHex();
-    }
-    ui->plainTextEditReceive->appendPlainText(data.toHex().toUpper());
+//    QByteArray data;
+//    if (serial->waitForReadyRead(REQUEST_DELAY)){
+//        data = serial->readAll();
+//        qDebug() << "read bytes - " << data.toHex();
+//    }
+//    ui->plainTextEditReceive->appendPlainText(data.toHex().toUpper());
 
-    static uint8_t previous_state;
-    if (previous_state != (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2L]){
-        previous_state = (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2L];
-        ui->plainTextEditHistory->appendPlainText(
-                    QString::number(previous_state));
-    }
+//    static uint8_t previous_state;
+//    if (previous_state != (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2L]){
+//        previous_state = (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2L];
+//        ui->plainTextEditHistory->appendPlainText(
+//                    QString::number(previous_state));
+//    }
 
-    ui->lineEditAddress->setText(
-                QString::number(data[VMA_DEV_RESPONSE_ADDRESS]));
-    ui->lineEditCurrent->setText(
-                QString::number(
-                    (uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1H] << 8 |
-                               (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1L])));
-    ui->lineEditCommutationPeriod->setText(
-                QString::number(
-                    (uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_VELOCITY1] << 8 |
-                               (uint8_t)data[VMA_DEV_RESPONSE_VELOCITY2])));
-    ui->lineEditState->setText(
-                QString::number(data[VMA_DEV_RESPONSE_CURRENT_2L]));
+//    ui->lineEditAddress->setText(
+//                QString::number(data[VMA_DEV_RESPONSE_ADDRESS]));
+//    ui->lineEditCurrent->setText(
+//                QString::number(
+//                    (uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1H] << 8 |
+//                               (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1L])));
+//    ui->lineEditCommutationPeriod->setText(
+//                QString::number(
+//                    (uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_VELOCITY1] << 8 |
+//                               (uint8_t)data[VMA_DEV_RESPONSE_VELOCITY2])));
+//    ui->lineEditState->setText(
+//                QString::number(data[VMA_DEV_RESPONSE_CURRENT_2L]));
 
-    ui->radioButtonSensorA->setDown(
-                (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000001);
-    ui->radioButtonSensorB->setDown(
-                (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000010);
-    ui->radioButtonSensorC->setDown(
-                (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000100);
+//    ui->radioButtonSensorA->setDown(
+//                (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000001);
+//    ui->radioButtonSensorB->setDown(
+//                (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000010);
+//    ui->radioButtonSensorC->setDown(
+//                (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000100);
 
 
-    ui->lineEditGrayCode->setText(
-                QString::number(data[VMA_DEV_RESPONSE_CURRENT_2H]));
+//    ui->lineEditGrayCode->setText(
+//                QString::number(data[VMA_DEV_RESPONSE_CURRENT_2H]));
 
 }
 
@@ -181,8 +191,10 @@ void MainWindow::initActionsConnections()
             ui->spinBoxFrequency, &QSpinBox::setValue);
     connect(ui->verticalSliderVelocity, &QSlider::valueChanged,
             [this](int value){ui->spinBoxVelocity->setValue(value-127);});
-    connect(ui->dial, &QDial::valueChanged,
+    connect(ui->dialAngle, &QDial::valueChanged,
             ui->spinBoxPosition, &QSpinBox::setValue);
+    connect(ui->dialOutrunningAngle, &QDial::valueChanged,
+            ui->spinBoxOutrunningAngle, &QSpinBox::setValue);
 
     connect(ui->spinBoxFrequency,
             static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
@@ -195,20 +207,23 @@ void MainWindow::initActionsConnections()
             static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             [this](int value)
     {
-        ui->dial->setValue(value);
+        ui->dialAngle->setValue(value);
         position = value;
     });
+    connect(ui->spinBoxOutrunningAngle,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            ui->dialOutrunningAngle, &QDial::setValue);
 
     connect(send_timer, &QTimer::timeout, this, &MainWindow::request);
     connect(serial,
             static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>
             (&QSerialPort::error), this, &MainWindow::handleError);
 
-    connect(ui->radioButton, &QRadioButton::toggled,
+    connect(ui->radioButtonPosition, &QRadioButton::toggled,
             [this](bool permission)
     {
         position_setting = permission;
-        ui->dial->setEnabled(permission);
+        ui->dialAngle->setEnabled(permission);
         ui->spinBoxPosition->setEnabled(permission);
 
     });
