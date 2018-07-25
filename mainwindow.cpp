@@ -115,51 +115,38 @@ void MainWindow::request()
     ui->plainTextEditTransmit->appendPlainText(msg_buf.toHex().toUpper());
 
     serial->clear(QSerialPort::Input);
-    MainWindow::writeData(msg_buf);
 
-    MainWindow::readData();
+    writeData(msg_buf);
+
+    readData();
 }
 
 
 void MainWindow::readData()
 {    
-//    QByteArray data;
-//    if (serial->waitForReadyRead(REQUEST_DELAY)){
-//        data = serial->readAll();
-//        qDebug() << "read bytes - " << data.toHex();
-//    }
-//    ui->plainTextEditReceive->appendPlainText(data.toHex().toUpper());
+    qDebug() << "read data";
+    QByteArray data;
+    if (serial->waitForReadyRead(RESPONSE_DELAY)){
+        data = serial->readAll();
+        qDebug() << "read bytes - " << data.toHex();
+    }
+    ui->plainTextEditReceive->appendPlainText(data.toHex().toUpper());
 
-//    static uint8_t previous_state;
-//    if (previous_state != (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2L]){
-//        previous_state = (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2L];
-//        ui->plainTextEditHistory->appendPlainText(
-//                    QString::number(previous_state));
-//    }
+    struct Response resp;
+    QDataStream stream(&data, QIODevice::ReadOnly);
 
-//    ui->lineEditAddress->setText(
-//                QString::number(data[VMA_DEV_RESPONSE_ADDRESS]));
-//    ui->lineEditCurrent->setText(
-//                QString::number(
-//                    (uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1H] << 8 |
-//                               (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_1L])));
-//    ui->lineEditCommutationPeriod->setText(
-//                QString::number(
-//                    (uint16_t)((uint8_t)data[VMA_DEV_RESPONSE_VELOCITY1] << 8 |
-//                               (uint8_t)data[VMA_DEV_RESPONSE_VELOCITY2])));
-//    ui->lineEditState->setText(
-//                QString::number(data[VMA_DEV_RESPONSE_CURRENT_2L]));
-
-//    ui->radioButtonSensorA->setDown(
-//                (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000001);
-//    ui->radioButtonSensorB->setDown(
-//                (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000010);
-//    ui->radioButtonSensorC->setDown(
-//                (uint8_t)data[VMA_DEV_RESPONSE_CURRENT_2H] & 0b00000100);
+    stream >> resp;
 
 
-//    ui->lineEditGrayCode->setText(
-//                QString::number(data[VMA_DEV_RESPONSE_CURRENT_2H]));
+    ui->lineEditAddress->setText(QString::number(resp.address));
+    ui->lineEditCurrent->setText(QString::number(resp.current));
+
+    ui->lineEditState->setText(QString::number(resp.state));
+
+    ui->radioButtonSensorA->setDown(resp.position_code & 0b00000001);
+    ui->radioButtonSensorB->setDown(resp.position_code & 0b00000010);
+    ui->radioButtonSensorC->setDown(resp.position_code & 0b00000100);
+
 
 }
 
@@ -190,7 +177,7 @@ void MainWindow::initActionsConnections()
     connect(ui->verticalSliderFrequency, &QSlider::valueChanged,
             ui->spinBoxFrequency, &QSpinBox::setValue);
     connect(ui->verticalSliderVelocity, &QSlider::valueChanged,
-            [this](int value){ui->spinBoxVelocity->setValue(value-127);});
+            [this](int value){ui->spinBoxVelocity->setValue(value);});
     connect(ui->dialAngle, &QDial::valueChanged,
             ui->spinBoxPosition, &QSpinBox::setValue);
     connect(ui->dialOutrunningAngle, &QDial::valueChanged,
@@ -201,8 +188,7 @@ void MainWindow::initActionsConnections()
             ui->verticalSliderFrequency, &QSlider::setValue);
     connect(ui->spinBoxVelocity,
             static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            [this](int value){ui->verticalSliderVelocity->setValue(value +
-                                                                   127);});
+            [this](int value){ui->verticalSliderVelocity->setValue(value);});
     connect(ui->spinBoxPosition,
             static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             [this](int value)

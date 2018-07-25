@@ -5,6 +5,7 @@
 #include <QDataStream>
 
 #define REQUEST_DELAY                       10
+#define RESPONSE_DELAY                      8
 #define REQUEST_SIZE                        12
 
 /* STM send requests and VMA send responses */
@@ -17,13 +18,14 @@ struct Request
     uint8_t update_base_vector; // true or false
     uint8_t position_setting; // enabling of position_setting
     uint16_t angle; // angle - 0..359;
-    uint8_t velocity;
+    int8_t velocity;
     uint8_t frequency;
     int16_t outrunning_angle;
     uint8_t CRC;
 
     friend QDataStream& operator<<(QDataStream &ds, const Request &req)
     {
+        ds.setByteOrder(QDataStream::LittleEndian);
         ds << req.AA;
         ds << req.type;
         ds << req.address;
@@ -38,6 +40,7 @@ struct Request
 
     friend QDataStream& operator>>(QDataStream &ds, Request &req)
     {
+        ds.setByteOrder(QDataStream::LittleEndian);
         ds >> req.AA;
         ds >> req.type;
         ds >> req.address;
