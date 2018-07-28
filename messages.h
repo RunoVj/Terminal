@@ -9,7 +9,6 @@
 #define REQUEST_SIZE                        12
 
 /* STM send requests and VMA send responses */
-
 struct Request
 {
     uint8_t AA;
