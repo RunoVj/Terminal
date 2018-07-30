@@ -4,9 +4,11 @@
 #include <stdint.h>
 #include <QDataStream>
 
-#define REQUEST_DELAY                       10
-#define RESPONSE_DELAY                      8
-#define REQUEST_SIZE                        12
+#define REQUEST_DELAY                       20
+#define RESPONSE_DELAY                      18
+
+#define NORMAL_REQUEST_TYPE 0x01
+#define CONFIG_REQUEST_TYPE 0x02
 
 /* STM send requests and VMA send responses */
 struct Request
@@ -59,8 +61,36 @@ struct ConfigRequest
 {
     uint8_t AA;
     uint8_t type; // 0x02
+    uint8_t update_firmware; // (bool) go to bootloader and update firmware
+    uint8_t forse_setting; // (bool) set new address or update firmware even if old address doesn't equal BLDC address
+    uint8_t old_address;
     uint8_t new_address;
     uint8_t CRC;
+
+    friend QDataStream& operator<<(QDataStream &ds, const ConfigRequest &req)
+    {
+        ds.setByteOrder(QDataStream::LittleEndian);
+        ds << req.AA;
+        ds << req.type;
+        ds << req.update_firmware;
+        ds << req.forse_setting;
+        ds << req.old_address;
+        ds << req.new_address;
+        return ds;
+    }
+
+    friend QDataStream& operator>>(QDataStream &ds, ConfigRequest &req)
+    {
+        ds.setByteOrder(QDataStream::LittleEndian);
+        ds >> req.AA;
+        ds >> req.type;
+        ds >> req.update_firmware;
+        ds >> req.forse_setting;
+        ds >> req.old_address;
+        ds >> req.new_address;
+        ds >> req.CRC;
+        return ds;
+    }
 } ;
 
 enum WorkingState:uint8_t {stopped, rotated, overcurrent};

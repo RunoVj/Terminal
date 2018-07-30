@@ -16,12 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     serial = new QSerialPort(this);
     settings = new SettingsDialog;
-    send_timer = new QTimer(this);
+    _send_timer = new QTimer(this);
 
-    position_setting = 0;
-    position = 0;
-    pwm_duty = ui->verticalSliderVelocity->value();
-    period = ui->verticalSliderFrequency->value();
+    _position_setting = 0;
+    _position = 0;
+    _pwm_duty = ui->verticalSliderVelocity->value();
+    _period = ui->verticalSliderFrequency->value();
+    _cur_mes_type = _next_mes_type = NORMAL_REQUEST_TYPE;
 
 
     ui->actionConnect->setEnabled(true);
@@ -29,17 +30,83 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionQuit->setEnabled(true);
     ui->actionConfigure->setEnabled(true);
 
-    status = new QLabel;
+    _status = new QLabel;
 
-    ui->statusbar->addWidget(status);
+    ui->statusbar->addWidget(_status);
 
     initActionsConnections();
 }
 
 MainWindow::~MainWindow()
 {
+    delete serial;
+    delete settings;
+    delete _send_timer;
     delete ui;
     delete settings;
+}
+
+void MainWindow::initActionsConnections()
+{
+    connect(ui->actionConnect, &QAction::triggered,
+            this, &MainWindow::openSerialPort);
+    connect(ui->actionDisconnect, &QAction::triggered,
+            this, &MainWindow::closeSerialPort);
+    connect(ui->actionQuit, &QAction::triggered,
+            this, &MainWindow::close);
+    connect(ui->actionConfigure, &QAction::triggered,
+            settings, &SettingsDialog::show);
+    connect(ui->actionClear, &QAction::triggered,
+            [this](void){ui->plainTextEditReceive->clear();});
+    connect(ui->actionClear, &QAction::triggered,
+            [this](void){ui->plainTextEditTransmit->clear();});
+    connect(ui->actionOpenHexFile, &QAction::triggered,
+            this, &MainWindow::open_hex);
+
+
+    connect(ui->verticalSliderFrequency, &QSlider::valueChanged,
+            ui->spinBoxFrequency, &QSpinBox::setValue);
+    connect(ui->verticalSliderVelocity, &QSlider::valueChanged,
+            [this](int value){ui->spinBoxVelocity->setValue(value);});
+    connect(ui->dialAngle, &QDial::valueChanged,
+            ui->spinBoxPosition, &QSpinBox::setValue);
+    connect(ui->dialOutrunningAngle, &QDial::valueChanged,
+            ui->spinBoxOutrunningAngle, &QSpinBox::setValue);
+
+    connect(ui->spinBoxFrequency,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            ui->verticalSliderFrequency, &QSlider::setValue);
+    connect(ui->spinBoxVelocity,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            [this](int value){ui->verticalSliderVelocity->setValue(value);});
+    connect(ui->spinBoxPosition,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            [this](int value)
+    {
+        ui->dialAngle->setValue(value);
+        _position = value;
+    });
+    connect(ui->spinBoxOutrunningAngle,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            ui->dialOutrunningAngle, &QDial::setValue);
+
+    connect(_send_timer, &QTimer::timeout, this, &MainWindow::request);
+    connect(serial,
+            static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>
+            (&QSerialPort::error), this, &MainWindow::handleError);
+
+    connect(ui->radioButtonPosition, &QRadioButton::toggled,
+            [this](bool permission)
+    {
+        _position_setting = permission;
+        ui->dialAngle->setEnabled(permission);
+        ui->spinBoxPosition->setEnabled(permission);
+
+    });
+
+    connect(ui->pushButtonSetAddress, &QPushButton::clicked, this, &MainWindow::config_request);
+
+
 }
 
 void MainWindow::openSerialPort()
@@ -59,7 +126,7 @@ void MainWindow::openSerialPort()
                           .arg(p.name).arg(p.stringBaudRate)
                           .arg(p.stringDataBits).arg(p.stringParity)
                           .arg(p.stringStopBits).arg(p.stringFlowControl));
-        send_timer->start(REQUEST_DELAY);
+        _send_timer->start(REQUEST_DELAY);
     } else {
         QMessageBox::critical(this, tr("Error"), serial->errorString());
 
@@ -75,7 +142,7 @@ void MainWindow::closeSerialPort()
     ui->actionDisconnect->setEnabled(false);
     ui->actionConfigure->setEnabled(true);
     showStatusMessage(tr("Disconnected"));
-    send_timer->stop();
+    _send_timer->stop();
 }
 
 void MainWindow::writeData(const QByteArray &data)
@@ -85,42 +152,68 @@ void MainWindow::writeData(const QByteArray &data)
 
 void MainWindow::request()
 {    
-    // fill request structure
-    Request req;
-    req.AA = 0xAA;
-    req.type = 0x01;
-    req.address = 0x01;
-    req.update_base_vector = ui->radioButtonCorrection->isChecked();
-    req.position_setting = ui->radioButtonPosition->isChecked();
-    req.angle = ui->dialAngle->value();
-    req.velocity = ui->verticalSliderVelocity->value();
-    req.frequency = ui->verticalSliderFrequency->value();
-
-    req.outrunning_angle = ui->dialOutrunningAngle->value();
-    req.update_base_vector = ui->radioButtonCorrection->isChecked();
-
-    // move to QByteArray
     QByteArray msg_buf;
     QDataStream stream(&msg_buf, QIODevice::Append);
-    stream << req;
+    // fill request structure
+    if (_next_mes_type == NORMAL_REQUEST_TYPE) {
+        _cur_mes_type = NORMAL_REQUEST_TYPE;
 
-    uint8_t crc = 0;
+        Request req;
+        req.AA = 0xAA;
+        req.type = NORMAL_REQUEST_TYPE;
+        req.address = 0x01;
+        req.update_base_vector = ui->radioButtonCorrection->isChecked();
+        req.position_setting = ui->radioButtonPosition->isChecked();
+        req.angle = ui->dialAngle->value();
+        req.velocity = ui->verticalSliderVelocity->value();
+        req.frequency = ui->verticalSliderFrequency->value();
 
-    for (int i = 0; i < REQUEST_SIZE - 1; i++){
-        crc ^= msg_buf[i];
+        req.outrunning_angle = ui->dialOutrunningAngle->value();
+        req.update_base_vector = ui->radioButtonCorrection->isChecked();
+
+        // move to QByteArray
+        stream << req;
+    }
+    else if (_next_mes_type == CONFIG_REQUEST_TYPE) {
+        _cur_mes_type = CONFIG_REQUEST_TYPE;
+        _next_mes_type = NORMAL_REQUEST_TYPE;
+
+        ConfigRequest conf_req;
+        conf_req.AA = 0xAA;
+        conf_req.type = CONFIG_REQUEST_TYPE;
+        conf_req.forse_setting = ui->radioButtonForseAddressSetting->
+                isChecked();
+        conf_req.new_address = ui->spinBoxAddress->value();
+        if (conf_req.forse_setting) {
+            conf_req.old_address = 0;
+        }
+        else {
+            conf_req.old_address = ui->lineEditAddress->text().toInt();
+        }
+
+        // move to QByteArray
+        stream << conf_req;
     }
 
+    // calculate CRC
+    uint8_t crc = 0;
+
+    // 0xAA doesn't include in CRC calculation
+    for (int i = 1; i < msg_buf.size(); i++){
+        crc ^= msg_buf[i];
+    }
     stream << crc;
 
     ui->plainTextEditTransmit->appendPlainText(msg_buf.toHex().toUpper());
-
     serial->clear(QSerialPort::Input);
-
     writeData(msg_buf);
-
     readData();
 }
 
+void MainWindow::config_request()
+{
+    _next_mes_type = CONFIG_REQUEST_TYPE;
+}
 
 void MainWindow::readData()
 {    
@@ -147,6 +240,21 @@ void MainWindow::readData()
     ui->radioButtonSensorB->setDown(resp.position_code & 0b00000010);
     ui->radioButtonSensorC->setDown(resp.position_code & 0b00000100);
 
+}
+
+void MainWindow::open_hex()
+{
+    QString file_name = QFileDialog::getOpenFileName(
+                this, "Open hex file",
+                "../brushless_motor_control/MDK-ARM/brushless_motor/",
+                "hex file (*.hex)");
+
+    QFile hex_file(file_name);
+    if (!hex_file.open(QFile::ReadOnly | QFile::Text)) {
+        QMessageBox::warning(this, "title", "file not open");
+    }
+    QTextStream hex(&hex_file);
+    ui->plainTextEditHex->setPlainText(hex.readAll());
 
 }
 
@@ -159,62 +267,6 @@ void MainWindow::handleError(QSerialPort::SerialPortError error)
     }
 }
 
-void MainWindow::initActionsConnections()
-{
-    connect(ui->actionConnect, &QAction::triggered,
-            this, &MainWindow::openSerialPort);
-    connect(ui->actionDisconnect, &QAction::triggered,
-            this, &MainWindow::closeSerialPort);
-    connect(ui->actionQuit, &QAction::triggered,
-            this, &MainWindow::close);
-    connect(ui->actionConfigure, &QAction::triggered,
-            settings, &SettingsDialog::show);
-    connect(ui->actionClear, &QAction::triggered,
-            [this](void){ui->plainTextEditReceive->clear();});
-    connect(ui->actionClear, &QAction::triggered,
-            [this](void){ui->plainTextEditTransmit->clear();});
-
-    connect(ui->verticalSliderFrequency, &QSlider::valueChanged,
-            ui->spinBoxFrequency, &QSpinBox::setValue);
-    connect(ui->verticalSliderVelocity, &QSlider::valueChanged,
-            [this](int value){ui->spinBoxVelocity->setValue(value);});
-    connect(ui->dialAngle, &QDial::valueChanged,
-            ui->spinBoxPosition, &QSpinBox::setValue);
-    connect(ui->dialOutrunningAngle, &QDial::valueChanged,
-            ui->spinBoxOutrunningAngle, &QSpinBox::setValue);
-
-    connect(ui->spinBoxFrequency,
-            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            ui->verticalSliderFrequency, &QSlider::setValue);
-    connect(ui->spinBoxVelocity,
-            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            [this](int value){ui->verticalSliderVelocity->setValue(value);});
-    connect(ui->spinBoxPosition,
-            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            [this](int value)
-    {
-        ui->dialAngle->setValue(value);
-        position = value;
-    });
-    connect(ui->spinBoxOutrunningAngle,
-            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-            ui->dialOutrunningAngle, &QDial::setValue);
-
-    connect(send_timer, &QTimer::timeout, this, &MainWindow::request);
-    connect(serial,
-            static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>
-            (&QSerialPort::error), this, &MainWindow::handleError);
-
-    connect(ui->radioButtonPosition, &QRadioButton::toggled,
-            [this](bool permission)
-    {
-        position_setting = permission;
-        ui->dialAngle->setEnabled(permission);
-        ui->spinBoxPosition->setEnabled(permission);
-
-    });
-}
-
 void MainWindow::on_actionQuit_triggered()
 {
     close();
@@ -222,23 +274,23 @@ void MainWindow::on_actionQuit_triggered()
 
 void MainWindow::showStatusMessage(const QString &message)
 {
-    status->setText(message);
+    _status->setText(message);
 }
 
 void MainWindow::on_verticalSliderVelocity_valueChanged(int value)
 {
-    pwm_duty = value;
-    qDebug() << "pwm duty = " << pwm_duty << "\n";
+    _pwm_duty = value;
+    qDebug() << "pwm duty = " << _pwm_duty << "\n";
 }
 
 void MainWindow::on_verticalSliderPosition_valueChanged(int value)
 {
-    position = value;
-    qDebug() << "position = " << position << "\n";
+    _position = value;
+    qDebug() << "position = " << _position << "\n";
 }
 
 void MainWindow::on_verticalSliderFrequency_valueChanged(int value)
 {
-    period = value;
-    qDebug() << "period = " << period << "\n";
+    _period = value;
+    qDebug() << "period = " << _period << "\n";
 }

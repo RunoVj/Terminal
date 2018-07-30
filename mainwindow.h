@@ -1,10 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtCore/QtGlobal>
+#include <QtCore>
 #include <QMainWindow>
 #include <QtSerialPort/QSerialPort>
 #include <QTimer>
+#include <QFile>
+#include <QTextStream>
+#include <QFileDialog>
 
 #include "messages.h"
 
@@ -44,22 +47,27 @@ private slots:
     void on_verticalSliderPosition_valueChanged(int value);
 
     void request();
+    void config_request();
+    void open_hex();
 
 private:
     void initActionsConnections();
     void showStatusMessage(const QString &message);
 
     Ui::MainWindow *ui;
-    QTimer *send_timer;
+    QTimer *_send_timer;
 
-    QLabel *status;
+    QLabel *_status;
     SettingsDialog *settings;
     QSerialPort *serial;
 
-    uint8_t pwm_duty;
-    uint8_t position;
-    uint8_t period;
-    bool position_setting;
+    uint8_t _cur_mes_type;
+    uint8_t _next_mes_type;
+
+    uint8_t _pwm_duty;
+    uint8_t _position;
+    uint8_t _period;
+    bool _position_setting;
 };
 
 #endif // MAINWINDOW_H

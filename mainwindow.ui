@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>670</width>
-    <height>657</height>
+    <width>731</width>
+    <height>694</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,10 +51,27 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_21">
             <item>
-             <widget class="QPlainTextEdit" name="plainTextEditReceive"/>
+             <widget class="QPlainTextEdit" name="plainTextEditReceive">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>150</height>
+               </size>
+              </property>
+              <property name="textInteractionFlags">
+               <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QPlainTextEdit" name="plainTextEditTransmit"/>
+             <widget class="QPlainTextEdit" name="plainTextEditTransmit">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>150</height>
+               </size>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -66,6 +83,90 @@
            <layout class="QHBoxLayout" name="horizontalLayout_23">
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_14">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_29">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_17">
+                  <item>
+                   <widget class="QLabel" name="labelSensorA">
+                    <property name="text">
+                     <string>Code A</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="labelSensorB">
+                    <property name="text">
+                     <string>Code B</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="labelSensorC">
+                    <property name="text">
+                     <string>Code C</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_18">
+                  <item>
+                   <widget class="QRadioButton" name="radioButtonSensorA">
+                    <property name="acceptDrops">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="checkable">
+                     <bool>false</bool>
+                    </property>
+                    <property name="autoExclusive">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radioButtonSensorB">
+                    <property name="mouseTracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="checkable">
+                     <bool>false</bool>
+                    </property>
+                    <property name="autoExclusive">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radioButtonSensorC">
+                    <property name="mouseTracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="autoFillBackground">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="checkable">
+                     <bool>false</bool>
+                    </property>
+                    <property name="autoExclusive">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_24">
                 <item>
@@ -235,95 +336,7 @@
            </layout>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_16">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_29">
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_17">
-                <item>
-                 <widget class="QLabel" name="labelSensorA">
-                  <property name="text">
-                   <string>Code A</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="labelSensorB">
-                  <property name="text">
-                   <string>Code B</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="labelSensorC">
-                  <property name="text">
-                   <string>Code C</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_18">
-                <item>
-                 <widget class="QRadioButton" name="radioButtonSensorA">
-                  <property name="acceptDrops">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="checkable">
-                   <bool>false</bool>
-                  </property>
-                  <property name="autoExclusive">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="radioButtonSensorB">
-                  <property name="mouseTracking">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="checkable">
-                   <bool>false</bool>
-                  </property>
-                  <property name="autoExclusive">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="radioButtonSensorC">
-                  <property name="mouseTracking">
-                   <bool>false</bool>
-                  </property>
-                  <property name="autoFillBackground">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="checkable">
-                   <bool>false</bool>
-                  </property>
-                  <property name="autoExclusive">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer">
+           <spacer name="horizontalSpacer_2">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -336,16 +349,62 @@
            </spacer>
           </item>
           <item>
+           <layout class="QVBoxLayout" name="verticalLayout_16"/>
+          </item>
+          <item>
            <layout class="QVBoxLayout" name="verticalLayout_19">
             <item>
-             <widget class="QRadioButton" name="radioButtonCorrection">
-              <property name="text">
-               <string>Correction</string>
-              </property>
-              <property name="autoExclusive">
-               <bool>false</bool>
-              </property>
-             </widget>
+             <layout class="QVBoxLayout" name="verticalLayout_3">
+              <item>
+               <widget class="QRadioButton" name="radioButtonCorrection">
+                <property name="text">
+                 <string>Update base vectors</string>
+                </property>
+                <property name="autoExclusive">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="radioButtonForseAddressSetting">
+                <property name="text">
+                 <string>Force address setting</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonFlash">
+                <property name="text">
+                 <string>Flash</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonFlashAll">
+                <property name="text">
+                 <string>Flash all</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QSpinBox" name="spinBoxAddress">
+                <property name="maximum">
+                 <number>7</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonSetAddress">
+                <property name="text">
+                 <string>Set new address</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
@@ -356,63 +415,11 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_32">
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_2">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout">
-                <item>
-                 <widget class="QLabel" name="label">
-                  <property name="text">
-                   <string>Outrunning angle</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="spinBoxOutrunningAngle">
-                  <property name="minimum">
-                   <number>-30</number>
-                  </property>
-                  <property name="maximum">
-                   <number>30</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <widget class="QDial" name="dialOutrunningAngle">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>150</width>
-                  <height>150</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>248</width>
-                  <height>250</height>
-                 </size>
-                </property>
-                <property name="minimum">
-                 <number>-30</number>
-                </property>
-                <property name="maximum">
-                 <number>30</number>
-                </property>
-                <property name="pageStep">
-                 <number>1</number>
-                </property>
-                <property name="invertedControls">
-                 <bool>false</bool>
-                </property>
-                <property name="wrapping">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QPlainTextEdit" name="plainTextEditHex">
+              <property name="textInteractionFlags">
+               <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+              </property>
+             </widget>
             </item>
             <item>
              <layout class="QVBoxLayout" name="verticalLayout">
@@ -462,6 +469,65 @@
                 </property>
                 <property name="maximum">
                  <number>359</number>
+                </property>
+                <property name="pageStep">
+                 <number>1</number>
+                </property>
+                <property name="invertedControls">
+                 <bool>false</bool>
+                </property>
+                <property name="wrapping">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>Outrunning angle</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBoxOutrunningAngle">
+                  <property name="minimum">
+                   <number>-30</number>
+                  </property>
+                  <property name="maximum">
+                   <number>30</number>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QDial" name="dialOutrunningAngle">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>150</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>248</width>
+                  <height>250</height>
+                 </size>
+                </property>
+                <property name="minimum">
+                 <number>-30</number>
+                </property>
+                <property name="maximum">
+                 <number>30</number>
                 </property>
                 <property name="pageStep">
                  <number>1</number>
@@ -585,7 +651,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>670</width>
+     <width>731</width>
      <height>20</height>
     </rect>
    </property>
@@ -610,6 +676,13 @@
      <string>Help</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpenHexFile"/>
+   </widget>
+   <addaction name="menuFile"/>
    <addaction name="menuCalls"/>
    <addaction name="menuTools"/>
    <addaction name="menuHelp"/>
@@ -624,6 +697,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionOpenHexFile"/>
    <addaction name="actionConnect"/>
    <addaction name="actionDisconnect"/>
    <addaction name="actionConfigure"/>
@@ -673,6 +747,16 @@
    </property>
    <property name="text">
     <string>Clear</string>
+   </property>
+  </action>
+  <action name="actionOpenHexFile">
+   <property name="icon">
+    <iconset>
+     <normalon>:/images/images/open-file.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Open hex file...</string>
    </property>
   </action>
  </widget>
