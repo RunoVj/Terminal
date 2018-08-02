@@ -3,12 +3,14 @@
 
 #include <stdint.h>
 #include <QDataStream>
+#include <QVector>
 
 #define REQUEST_DELAY                       20
 #define RESPONSE_DELAY                      18
 
 #define NORMAL_REQUEST_TYPE 0x01
 #define CONFIG_REQUEST_TYPE 0x02
+#define FIRMWARE_REQUEST_TYPE 0x03
 
 /* STM send requests and VMA send responses */
 struct Request
@@ -91,7 +93,79 @@ struct ConfigRequest
         ds >> req.CRC;
         return ds;
     }
-} ;
+};
+
+struct FirmwaregRequest
+{
+    uint8_t AA;
+    uint8_t type; // 0x03
+    uint8_t address;
+    //hex
+
+    struct IntelHEX
+    {
+        uint8_t _data_size;
+        uint16_t start_address;
+        uint8_t operation_type;
+        QVector<uint8_t> data;
+        uint8_t CRC;
+    }hex;
+
+    uint8_t CRC;
+
+    friend QDataStream& operator<<(QDataStream &ds, const FirmwaregRequest &req)
+    {
+        ds.setByteOrder(QDataStream::LittleEndian);
+        ds << req.AA;
+        ds << req.type;
+        ds << req.address;
+        ds << req.hex._data_size;
+        ds << req.hex.start_address;
+        ds << req.hex.operation_type;
+        for (auto itr : req.hex.data) {
+            ds << itr;
+        }
+        ds << req.hex.CRC;
+
+        return ds;
+    }
+
+    friend QDataStream& operator>>(QDataStream &ds, FirmwaregRequest &req)
+    {
+        ds.setByteOrder(QDataStream::LittleEndian);
+        ds >> req.AA;
+        ds >> req.type;
+        ds >> req.address;
+        ds >> req.hex._data_size;
+        ds >> req.hex.start_address;
+        ds >> req.hex.operation_type;
+        for (int i = 0; i < req.hex._data_size; ++i) {
+            uint8_t tmp;
+            ds >> tmp;
+            req.hex.data.push_back(tmp);
+        }
+        ds >> req.hex.CRC;
+        ds >> req.CRC;
+
+        return ds;
+    }
+
+    friend QDataStream& operator>>(QDataStream &ds, FirmwaregRequest::IntelHEX &hex)
+    {
+        ds.setByteOrder(QDataStream::LittleEndian);
+        ds >> hex._data_size;
+        ds >> hex.start_address;
+        ds >> hex.operation_type;
+        for (int i = 0; i < hex._data_size; ++i) {
+            uint8_t tmp;
+            ds >> tmp;
+            hex.data.push_back(tmp);
+        }
+        ds >> hex.CRC;
+
+        return ds;
+    }
+};
 
 enum WorkingState:uint8_t {stopped, rotated, overcurrent};
 

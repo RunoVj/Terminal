@@ -356,17 +356,39 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_3">
               <item>
-               <widget class="QRadioButton" name="radioButtonCorrection">
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
+                   <string>Communicate with</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBoxCurrentAddress">
+                  <property name="maximum">
+                   <number>7</number>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBoxCircleMode">
                 <property name="text">
-                 <string>Update base vectors</string>
-                </property>
-                <property name="autoExclusive">
-                 <bool>false</bool>
+                 <string>Circle mode</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButtonForseAddressSetting">
+               <widget class="QCheckBox" name="checkBoxUpdateBaseVector">
+                <property name="text">
+                 <string>Update base vectors</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBoxSetAddress">
                 <property name="text">
                  <string>Force address setting</string>
                 </property>
@@ -391,7 +413,7 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
               <item>
-               <widget class="QSpinBox" name="spinBoxAddress">
+               <widget class="QSpinBox" name="spinBoxSetAddress">
                 <property name="maximum">
                  <number>7</number>
                 </property>
@@ -581,8 +603,11 @@
             <property name="pageStep">
              <number>1</number>
             </property>
+            <property name="value">
+             <number>1</number>
+            </property>
             <property name="sliderPosition">
-             <number>45</number>
+             <number>1</number>
             </property>
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -624,7 +649,7 @@
              <number>90</number>
             </property>
             <property name="value">
-             <number>45</number>
+             <number>1</number>
             </property>
            </widget>
           </item>

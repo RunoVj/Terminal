@@ -32,24 +32,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private slots:
-    void openSerialPort();
-    void closeSerialPort();
-    void writeData(const QByteArray &data);
-    void readData();
-
-
-    void handleError(QSerialPort::SerialPortError error);
-
-    void on_actionQuit_triggered();
-    void on_verticalSliderVelocity_valueChanged(int value);
-    void on_verticalSliderFrequency_valueChanged(int value);
-    void on_verticalSliderPosition_valueChanged(int value);
-
-    void request();
-    void config_request();
-    void open_hex();
-
 private:
     void initActionsConnections();
     void showStatusMessage(const QString &message);
@@ -68,6 +50,29 @@ private:
     uint8_t _position;
     uint8_t _period;
     bool _position_setting;
+
+    QVector<QByteArray> _firmware;
+
+private slots:
+    void openSerialPort();
+    void closeSerialPort();
+    void writeData(const QByteArray &data);
+    void readData();
+
+
+    void handleError(QSerialPort::SerialPortError error);
+
+    void on_actionQuit_triggered();
+    void on_verticalSliderVelocity_valueChanged(int value);
+    void on_verticalSliderFrequency_valueChanged(int value);
+    void on_verticalSliderPosition_valueChanged(int value);
+
+    void request();
+    void config_request();
+    void open_hex();
+
+    void flash();
+
 };
 
 #endif // MAINWINDOW_H

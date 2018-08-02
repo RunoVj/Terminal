@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _pwm_duty = ui->verticalSliderVelocity->value();
     _period = ui->verticalSliderFrequency->value();
     _cur_mes_type = _next_mes_type = NORMAL_REQUEST_TYPE;
+    _firmware.clear();
 
 
     ui->actionConnect->setEnabled(true);
@@ -104,9 +105,12 @@ void MainWindow::initActionsConnections()
 
     });
 
-    connect(ui->pushButtonSetAddress, &QPushButton::clicked, this, &MainWindow::config_request);
+    connect(ui->pushButtonSetAddress, &QPushButton::clicked,
+            this, &MainWindow::config_request);
 
-
+    // flashing
+    connect(ui->pushButtonFlash, &QPushButton::clicked,
+            this, &MainWindow::flash);
 }
 
 void MainWindow::openSerialPort()
@@ -161,15 +165,22 @@ void MainWindow::request()
         Request req;
         req.AA = 0xAA;
         req.type = NORMAL_REQUEST_TYPE;
-        req.address = 0x01;
-        req.update_base_vector = ui->radioButtonCorrection->isChecked();
+        if (ui->checkBoxCircleMode->isChecked()) {
+            req.address = ui->spinBoxCurrentAddress->value();
+            uint8_t next_addr = (ui->spinBoxCurrentAddress->value() + 1) % 8;
+            ui->spinBoxCurrentAddress->setValue(next_addr);
+        }
+        else {
+            req.address = ui->spinBoxCurrentAddress->value();
+        }
+        req.update_base_vector = ui->checkBoxUpdateBaseVector->isChecked();
         req.position_setting = ui->radioButtonPosition->isChecked();
         req.angle = ui->dialAngle->value();
         req.velocity = ui->verticalSliderVelocity->value();
         req.frequency = ui->verticalSliderFrequency->value();
 
         req.outrunning_angle = ui->dialOutrunningAngle->value();
-        req.update_base_vector = ui->radioButtonCorrection->isChecked();
+        req.update_base_vector = ui->checkBoxUpdateBaseVector->isChecked();
 
         // move to QByteArray
         stream << req;
@@ -181,18 +192,46 @@ void MainWindow::request()
         ConfigRequest conf_req;
         conf_req.AA = 0xAA;
         conf_req.type = CONFIG_REQUEST_TYPE;
-        conf_req.forse_setting = ui->radioButtonForseAddressSetting->
-                isChecked();
-        conf_req.new_address = ui->spinBoxAddress->value();
+        conf_req.forse_setting = ui->checkBoxSetAddress->isChecked();
+        conf_req.new_address = ui->spinBoxSetAddress->value();
         if (conf_req.forse_setting) {
             conf_req.old_address = 0;
         }
         else {
-            conf_req.old_address = ui->lineEditAddress->text().toInt();
+            conf_req.old_address = ui->spinBoxCurrentAddress->value();
         }
 
         // move to QByteArray
         stream << conf_req;
+    }
+
+    else if (_next_mes_type == FIRMWARE_REQUEST_TYPE) {
+        // move hex string line to QByteArray
+        if (_firmware.isEmpty()) {
+            QMessageBox::warning(this, "title", "hex file doesn't open!");
+            _next_mes_type = NORMAL_REQUEST_TYPE;
+            return;
+        }
+        QByteArray cur_str = _firmware.at(0);
+        _firmware.removeFirst();
+
+        FirmwaregRequest firmware_req;
+        FirmwaregRequest::IntelHEX hex_line;
+        QDataStream ds(&cur_str, QIODevice::ReadOnly);
+        ds >> hex_line;
+
+        firmware_req.AA = 0xAA;
+        firmware_req.type = FIRMWARE_REQUEST_TYPE;
+        firmware_req.address = ui->spinBoxCurrentAddress->value();
+        firmware_req.hex = hex_line;
+
+        if (_firmware.isEmpty()) {
+            QMessageBox::information(this, "title",
+                                     "Firmware upgrade complited!");
+            _next_mes_type = NORMAL_REQUEST_TYPE;
+        }
+
+        stream << firmware_req;
     }
 
     // calculate CRC
@@ -256,6 +295,19 @@ void MainWindow::open_hex()
     QTextStream hex(&hex_file);
     ui->plainTextEditHex->setPlainText(hex.readAll());
 
+}
+
+void MainWindow::flash()
+{
+    QString hex = ui->plainTextEditHex->toPlainText();
+    _firmware.clear();
+    for (auto itr : hex.split("\n")) {
+        if (itr == "") {
+            continue;
+        }
+        _firmware.push_back(QByteArray::fromHex(itr.toUtf8()));
+    }
+    _next_mes_type = FIRMWARE_REQUEST_TYPE;
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
