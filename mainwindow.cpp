@@ -192,7 +192,8 @@ void MainWindow::request()
         ConfigRequest conf_req;
         conf_req.AA = 0xAA;
         conf_req.type = CONFIG_REQUEST_TYPE;
-        conf_req.forse_setting = ui->checkBoxSetAddress->isChecked();
+        conf_req.update_firmware = ui->checkBoxUpdateFirmware->isChecked();
+        conf_req.forse_setting = ui->checkBoxForceSettingAddress->isChecked();
         conf_req.new_address = ui->spinBoxSetAddress->value();
         if (conf_req.forse_setting) {
             conf_req.old_address = 0;
@@ -206,6 +207,7 @@ void MainWindow::request()
     }
 
     else if (_next_mes_type == FIRMWARE_REQUEST_TYPE) {
+        _cur_mes_type = FIRMWARE_REQUEST_TYPE;
         // move hex string line to QByteArray
         if (_firmware.isEmpty()) {
             QMessageBox::warning(this, "title", "hex file doesn't open!");
@@ -223,6 +225,8 @@ void MainWindow::request()
         firmware_req.AA = 0xAA;
         firmware_req.type = FIRMWARE_REQUEST_TYPE;
         firmware_req.address = ui->spinBoxCurrentAddress->value();
+        firmware_req.force_update = ui->checkBoxForceSettingAddress->isChecked();
+        firmware_req.get_response = ui->checkBoxSendResponse->isChecked();
         firmware_req.hex = hex_line;
 
         if (_firmware.isEmpty()) {
@@ -258,26 +262,35 @@ void MainWindow::readData()
 {    
     qDebug() << "read data";
     QByteArray data;
+
     if (serial->waitForReadyRead(RESPONSE_DELAY)){
         data = serial->readAll();
         qDebug() << "read bytes - " << data.toHex();
     }
-    ui->plainTextEditReceive->appendPlainText(data.toHex().toUpper());
+    if (!data.isEmpty()) {
+        ui->plainTextEditReceive->appendPlainText(data.toHex().toUpper());
+    }
 
-    struct Response resp;
-    QDataStream stream(&data, QIODevice::ReadOnly);
+    QDataStream stream(&data, QIODevice::ReadOnly);;
 
-    stream >> resp;
+    if (_cur_mes_type == FIRMWARE_REQUEST_TYPE) {
+        struct FirmwareResponse resp;
+    }
+    else {
+        struct Response resp;
+
+        stream >> resp;
 
 
-    ui->lineEditAddress->setText(QString::number(resp.address));
-    ui->lineEditCurrent->setText(QString::number(resp.current));
+        ui->lineEditAddress->setText(QString::number(resp.address));
+        ui->lineEditCurrent->setText(QString::number(resp.current));
 
-    ui->lineEditState->setText(QString::number(resp.state));
+        ui->lineEditState->setText(QString::number(resp.state));
 
-    ui->radioButtonSensorA->setDown(resp.position_code & 0b00000001);
-    ui->radioButtonSensorB->setDown(resp.position_code & 0b00000010);
-    ui->radioButtonSensorC->setDown(resp.position_code & 0b00000100);
+        ui->radioButtonSensorA->setDown(resp.position_code & 0b00000001);
+        ui->radioButtonSensorB->setDown(resp.position_code & 0b00000010);
+        ui->radioButtonSensorC->setDown(resp.position_code & 0b00000100);
+    }
 
 }
 

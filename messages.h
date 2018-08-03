@@ -5,8 +5,8 @@
 #include <QDataStream>
 #include <QVector>
 
-#define REQUEST_DELAY                       20
-#define RESPONSE_DELAY                      18
+#define REQUEST_DELAY                       10
+#define RESPONSE_DELAY                      8
 
 #define NORMAL_REQUEST_TYPE 0x01
 #define CONFIG_REQUEST_TYPE 0x02
@@ -100,6 +100,8 @@ struct FirmwaregRequest
     uint8_t AA;
     uint8_t type; // 0x03
     uint8_t address;
+    uint8_t force_update; // update even if address doesn't equal BLDC address
+    uint8_t get_response; // send status
     //hex
 
     struct IntelHEX
@@ -119,6 +121,8 @@ struct FirmwaregRequest
         ds << req.AA;
         ds << req.type;
         ds << req.address;
+        ds << req.force_update;
+        ds << req.get_response;
         ds << req.hex._data_size;
         ds << req.hex.start_address;
         ds << req.hex.operation_type;
@@ -136,6 +140,8 @@ struct FirmwaregRequest
         ds >> req.AA;
         ds >> req.type;
         ds >> req.address;
+        ds >> req.force_update;
+        ds >> req.get_response;
         ds >> req.hex._data_size;
         ds >> req.hex.start_address;
         ds >> req.hex.operation_type;
@@ -152,7 +158,7 @@ struct FirmwaregRequest
 
     friend QDataStream& operator>>(QDataStream &ds, FirmwaregRequest::IntelHEX &hex)
     {
-        ds.setByteOrder(QDataStream::LittleEndian);
+        ds.setByteOrder(QDataStream::BigEndian);
         ds >> hex._data_size;
         ds >> hex.start_address;
         ds >> hex.operation_type;
@@ -163,6 +169,34 @@ struct FirmwaregRequest
         }
         ds >> hex.CRC;
 
+        return ds;
+    }
+};
+
+struct FirmwareResponse
+{
+    uint8_t AA;
+    uint8_t type; // 0x03
+    uint8_t address;
+    uint8_t status;
+    uint8_t CRC;
+
+    friend QDataStream& operator<<(QDataStream &ds, const FirmwareResponse &resp)
+    {
+        ds << resp.AA;
+        ds << resp.type;
+        ds << resp.address;
+        ds << resp.status;
+        return ds;
+    }
+
+    friend QDataStream& operator>>(QDataStream &ds, FirmwareResponse &resp)
+    {
+        ds >> resp.AA;
+        ds >> resp.type;
+        ds >> resp.address;
+        ds >> resp.status;
+        ds >> resp.CRC;
         return ds;
     }
 };
