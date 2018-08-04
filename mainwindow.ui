@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>731</width>
-    <height>694</height>
+    <width>816</width>
+    <height>725</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -389,13 +389,28 @@
               </item>
               <item>
                <widget class="QCheckBox" name="checkBoxForceSettingAddress">
+                <property name="toolTip">
+                 <string/>
+                </property>
                 <property name="text">
-                 <string>Force address</string>
+                 <string>Force address </string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QCheckBox" name="checkBoxSendResponse">
+                <property name="toolTip">
+                 <string>Enable during firmware update</string>
+                </property>
+                <property name="statusTip">
+                 <string/>
+                </property>
+                <property name="whatsThis">
+                 <string/>
+                </property>
+                <property name="inputMethodHints">
+                 <set>Qt::ImhNone</set>
+                </property>
                 <property name="text">
                  <string>Send update status</string>
                 </property>
@@ -412,13 +427,6 @@
                <widget class="QPushButton" name="pushButtonFlash">
                 <property name="text">
                  <string>Flash</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButtonFlashAll">
-                <property name="text">
-                 <string>Flash all</string>
                 </property>
                </widget>
               </item>
@@ -697,7 +705,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>731</width>
+     <width>816</width>
      <height>20</height>
     </rect>
    </property>
