@@ -289,9 +289,10 @@ void MainWindow::readData()
 
         stream >> resp;
 
-
         ui->lineEditAddress->setText(QString::number(resp.address));
-        ui->lineEditCurrent->setText(QString::number(resp.current));
+        float current_in_amp = (resp.current - MAX_CURRENT/2)/CURRENT_COEF;
+        ui->lineEditCurrent->setText(QString::number(current_in_amp) + " A (" +
+                                     QString::number(resp.current) + " ADC)");
 
         ui->lineEditState->setText(QString::number(resp.state));
 

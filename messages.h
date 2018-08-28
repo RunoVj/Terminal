@@ -7,6 +7,10 @@
 
 #define REQUEST_DELAY                       10
 #define RESPONSE_DELAY                      8
+#define MAX_CURRENT 4095
+#define MAX_CURRENT_A 30
+#define SENSOR_OFFSET 0.9
+#define CURRENT_COEF ((MAX_CURRENT*SENSOR_OFFSET-MAX_CURRENT/2)/MAX_CURRENT_A)
 
 #define NORMAL_REQUEST_TYPE 0x01
 #define CONFIG_REQUEST_TYPE 0x02
@@ -225,6 +229,7 @@ struct Response
 
     friend QDataStream& operator<<(QDataStream &ds, const Response &resp)
     {
+        ds.setByteOrder(QDataStream::LittleEndian);
         ds << resp.AA;
         ds << resp.type;
         ds << resp.address;
@@ -238,6 +243,7 @@ struct Response
 
     friend QDataStream& operator>>(QDataStream &ds, Response &resp)
     {
+        ds.setByteOrder(QDataStream::LittleEndian);
         ds >> resp.AA;
         ds >> resp.type;
         ds >> resp.address;
