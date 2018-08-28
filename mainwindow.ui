@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>816</width>
-    <height>725</height>
+    <width>836</width>
+    <height>715</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -331,7 +331,120 @@
              </layout>
             </item>
             <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
              <layout class="QVBoxLayout" name="verticalLayout_15"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_16">
+            <item>
+             <widget class="QCheckBox" name="checkBoxForceSettingAddress">
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="text">
+               <string>Force address </string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBoxUpdateFirmware">
+              <property name="text">
+               <string>Update firmware</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QLabel" name="label_5">
+                <property name="text">
+                 <string>High impulse threshold</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEditCurrentHighThreshold">
+                <property name="text">
+                 <string>3686</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <widget class="QLabel" name="label_9">
+                <property name="text">
+                 <string>Low impulse threshold</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEditCurrentLowThreshold">
+                <property name="text">
+                 <string>410</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QLabel" name="label_10">
+                <property name="text">
+                 <string>Average current threshold</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEditCurrentAverageThreshold">
+                <property name="text">
+                 <string>3000</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string>New address</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBoxSetAddress">
+                <property name="maximum">
+                 <number>7</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButtonSetAddress">
+              <property name="text">
+               <string>Set config</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -347,9 +460,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_16"/>
           </item>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_19">
@@ -388,16 +498,6 @@
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBoxForceSettingAddress">
-                <property name="toolTip">
-                 <string/>
-                </property>
-                <property name="text">
-                 <string>Force address </string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QCheckBox" name="checkBoxSendResponse">
                 <property name="toolTip">
                  <string>Enable during firmware update</string>
@@ -417,41 +517,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBoxUpdateFirmware">
-                <property name="text">
-                 <string>Update firmware</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QPushButton" name="pushButtonFlash">
                 <property name="text">
                  <string>Flash</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_2">
-              <item>
-               <widget class="QLabel" name="label_4">
-                <property name="text">
-                 <string>New address</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSpinBox" name="spinBoxSetAddress">
-                <property name="maximum">
-                 <number>7</number>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButtonSetAddress">
-                <property name="text">
-                 <string>Set new config</string>
                 </property>
                </widget>
               </item>
@@ -705,7 +773,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>816</width>
+     <width>836</width>
      <height>20</height>
     </rect>
    </property>

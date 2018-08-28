@@ -202,6 +202,14 @@ void MainWindow::request()
             conf_req.old_address = ui->spinBoxCurrentAddress->value();
         }
 
+        conf_req.high_threshold = static_cast<uint16_t>(
+                    ui->lineEditCurrentHighThreshold->text().toInt());
+        conf_req.low_threshold = static_cast<uint16_t>(
+                    ui->lineEditCurrentLowThreshold->text().toInt());
+        conf_req.average_threshold = static_cast<uint16_t>(
+                    ui->lineEditCurrentAverageThreshold->text().toInt());
+
+
         // move to QByteArray
         stream << conf_req;
     }

@@ -67,6 +67,9 @@ struct ConfigRequest
     uint8_t forse_setting; // (bool) set new address or update firmware even if old address doesn't equal BLDC address
     uint8_t old_address;
     uint8_t new_address;
+    uint16_t high_threshold;
+    uint16_t low_threshold;
+    uint16_t average_threshold;
     uint8_t CRC;
 
     friend QDataStream& operator<<(QDataStream &ds, const ConfigRequest &req)
@@ -78,6 +81,9 @@ struct ConfigRequest
         ds << req.forse_setting;
         ds << req.old_address;
         ds << req.new_address;
+        ds << req.high_threshold;
+        ds << req.low_threshold;
+        ds << req.average_threshold;
         return ds;
     }
 
@@ -90,6 +96,9 @@ struct ConfigRequest
         ds >> req.forse_setting;
         ds >> req.old_address;
         ds >> req.new_address;
+        ds >> req.high_threshold;
+        ds >> req.low_threshold;
+        ds >> req.average_threshold;
         ds >> req.CRC;
         return ds;
     }
