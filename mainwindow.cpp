@@ -111,6 +111,10 @@ void MainWindow::initActionsConnections()
     // flashing
     connect(ui->pushButtonFlash, &QPushButton::clicked,
             this, &MainWindow::flash);
+
+    // current thresholds
+    connect(ui->radioButtonEnableCurrentThresholds, &QRadioButton::clicked,
+            this, &MainWindow::disable_current_thresholds);
 }
 
 void MainWindow::openSerialPort()
@@ -367,4 +371,21 @@ void MainWindow::on_verticalSliderFrequency_valueChanged(int value)
 {
     _period = value;
     qDebug() << "period = " << _period << "\n";
+}
+
+void MainWindow::disable_current_thresholds(bool enable_thresholds)
+{
+    if (enable_thresholds) {
+        ui->lineEditCurrentHighThreshold->setReadOnly(false);
+        ui->lineEditCurrentAverageThreshold->setReadOnly(false);
+        ui->lineEditCurrentLowThreshold->setReadOnly(false);
+    }
+    else {
+        ui->lineEditCurrentHighThreshold->setText(QString::number(4095));
+        ui->lineEditCurrentAverageThreshold->setText(QString::number(4095));
+        ui->lineEditCurrentLowThreshold->setText(QString::number(0));
+        ui->lineEditCurrentHighThreshold->setReadOnly(true);
+        ui->lineEditCurrentAverageThreshold->setReadOnly(true);
+        ui->lineEditCurrentLowThreshold->setReadOnly(true);
+    }
 }

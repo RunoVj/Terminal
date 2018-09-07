@@ -59,6 +59,7 @@ private slots:
     void writeData(const QByteArray &data);
     void readData();
 
+    void disable_current_thresholds(bool enable_thresholds);
 
     void handleError(QSerialPort::SerialPortError error);
 
