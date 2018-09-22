@@ -783,7 +783,7 @@
           <item>
            <widget class="QSlider" name="verticalSliderSpeedK">
             <property name="maximum">
-             <number>65535</number>
+             <number>10000</number>
             </property>
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -820,7 +820,7 @@
           <item>
            <widget class="QSpinBox" name="spinBoxSpeedK">
             <property name="maximum">
-             <number>65535</number>
+             <number>10000</number>
             </property>
            </widget>
           </item>

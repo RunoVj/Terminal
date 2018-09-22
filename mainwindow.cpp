@@ -176,7 +176,7 @@ void MainWindow::request()
         req.type = NORMAL_REQUEST_TYPE;
         if (ui->checkBoxCircleMode->isChecked()) {
             req.address = ui->spinBoxCurrentAddress->value();
-            uint8_t next_addr = (ui->spinBoxCurrentAddress->value() + 1) % 8;
+            uint8_t next_addr = (ui->spinBoxCurrentAddress->value() + 1) % 9;
             ui->spinBoxCurrentAddress->setValue(next_addr);
         }
         else {
