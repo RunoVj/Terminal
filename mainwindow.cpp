@@ -69,6 +69,8 @@ void MainWindow::initActionsConnections()
             ui->spinBoxFrequency, &QSpinBox::setValue);
     connect(ui->verticalSliderVelocity, &QSlider::valueChanged,
             [this](int value){ui->spinBoxVelocity->setValue(value);});
+    connect(ui->verticalSliderSpeedK, &QSlider::valueChanged,
+            ui->spinBoxSpeedK, &QSpinBox::setValue);
     connect(ui->dialAngle, &QDial::valueChanged,
             ui->spinBoxPosition, &QSpinBox::setValue);
     connect(ui->dialOutrunningAngle, &QDial::valueChanged,
@@ -80,6 +82,9 @@ void MainWindow::initActionsConnections()
     connect(ui->spinBoxVelocity,
             static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             [this](int value){ui->verticalSliderVelocity->setValue(value);});
+    connect(ui->spinBoxSpeedK,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            [this](int value){ui->verticalSliderSpeedK->setValue(value);});
     connect(ui->spinBoxPosition,
             static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             [this](int value)
@@ -185,6 +190,7 @@ void MainWindow::request()
 
         req.outrunning_angle = ui->dialOutrunningAngle->value();
         req.update_base_vector = ui->checkBoxUpdateBaseVector->isChecked();
+        req.speed_k = ui->verticalSliderSpeedK->value();
 
         // move to QByteArray
         stream << req;
@@ -303,6 +309,8 @@ void MainWindow::readData()
         ui->radioButtonSensorA->setDown(resp.position_code & 0b00000001);
         ui->radioButtonSensorB->setDown(resp.position_code & 0b00000010);
         ui->radioButtonSensorC->setDown(resp.position_code & 0b00000100);
+
+        ui->lineEditSpeedPeriod->setText(QString::number(resp.speed_period));
     }
 
 }

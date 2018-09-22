@@ -28,6 +28,7 @@ struct Request
     int8_t velocity;
     uint8_t frequency;
     int16_t outrunning_angle;
+    uint16_t speed_k;
     uint8_t CRC;
 
     friend QDataStream& operator<<(QDataStream &ds, const Request &req)
@@ -42,6 +43,7 @@ struct Request
         ds << req.velocity;
         ds << req.frequency;
         ds << req.outrunning_angle;
+        ds << req.speed_k;
         return ds;
     }
 
@@ -57,6 +59,7 @@ struct Request
         ds >> req.velocity;
         ds >> req.frequency;
         ds >> req.outrunning_angle;
+        ds >> req.speed_k;
         ds >> req.CRC;
         return ds;
     }
@@ -225,6 +228,7 @@ struct Response
     uint8_t position_code;
     uint16_t cur_angle;
     uint16_t current;
+    uint16_t speed_period;
     uint8_t CRC;
 
     friend QDataStream& operator<<(QDataStream &ds, const Response &resp)
@@ -257,6 +261,8 @@ struct Response
         ds >> resp.position_code;
         ds >> resp.cur_angle;
         ds >> resp.current;
+        ds >> resp.speed_period;
+
         return ds;
     }
 };

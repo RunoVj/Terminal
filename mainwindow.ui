@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>836</width>
-    <height>715</height>
+    <width>859</width>
+    <height>709</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -328,6 +328,33 @@
                 </item>
                </layout>
               </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_7">
+                <item>
+                 <widget class="QLabel" name="labelSpeedPeriod">
+                  <property name="text">
+                   <string>Speed period</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEditSpeedPeriod"/>
+                </item>
+               </layout>
+              </item>
              </layout>
             </item>
             <item>
@@ -443,7 +470,7 @@
               <item>
                <widget class="QSpinBox" name="spinBoxSetAddress">
                 <property name="maximum">
-                 <number>7</number>
+                 <number>8</number>
                 </property>
                </widget>
               </item>
@@ -487,7 +514,7 @@
                 <item>
                  <widget class="QSpinBox" name="spinBoxCurrentAddress">
                   <property name="maximum">
-                   <number>7</number>
+                   <number>8</number>
                   </property>
                  </widget>
                 </item>
@@ -671,6 +698,9 @@
               </item>
              </layout>
             </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_4"/>
+            </item>
            </layout>
           </item>
          </layout>
@@ -692,6 +722,13 @@
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>PWM duty</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Speed K</string>
             </property>
            </widget>
           </item>
@@ -743,6 +780,16 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QSlider" name="verticalSliderSpeedK">
+            <property name="maximum">
+             <number>65535</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -770,6 +817,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QSpinBox" name="spinBoxSpeedK">
+            <property name="maximum">
+             <number>65535</number>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -783,7 +837,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>836</width>
+     <width>859</width>
      <height>20</height>
     </rect>
    </property>
