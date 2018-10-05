@@ -120,6 +120,23 @@ void MainWindow::initActionsConnections()
     // current thresholds
     connect(ui->radioButtonEnableCurrentThresholds, &QRadioButton::clicked,
             this, &MainWindow::disable_current_thresholds);
+
+    // run stress test cycle
+    connect(ui->pushButtonRunStressTest, &QPushButton::toggled, [this](bool checked)
+    {
+        if (checked) {
+            _stress_test_timer = new QTimer;
+            connect(_stress_test_timer, &QTimer::timeout, this, &MainWindow::stress_test_timer_timeout);
+            _stress_test_timer->start(static_cast<int>(1000/ui->spinBoxStressFrequency->value()));
+            stress_test_numb = ui->spinBoxStressTestDuration->value()*
+                    ui->spinBoxStressFrequency->value();
+        }
+        else {
+            _stress_test_timer->stop();
+            delete _stress_test_timer;
+            disconnect(_stress_test_timer, &QTimer::timeout, this, &MainWindow::stress_test_timer_timeout);
+        }
+    });
 }
 
 void MainWindow::openSerialPort()
@@ -395,5 +412,17 @@ void MainWindow::disable_current_thresholds(bool enable_thresholds)
         ui->lineEditCurrentHighThreshold->setReadOnly(true);
         ui->lineEditCurrentAverageThreshold->setReadOnly(true);
         ui->lineEditCurrentLowThreshold->setReadOnly(true);
+    }
+}
+
+void MainWindow::stress_test_timer_timeout()
+{
+    ui->verticalSliderVelocity->setValue(-ui->verticalSliderVelocity->value());
+    --stress_test_numb;
+    if (stress_test_numb > 0) {
+        _stress_test_timer->start(static_cast<int>(1000/ui->spinBoxStressFrequency->value()));
+    }
+    else {
+        _stress_test_timer->stop();
     }
 }

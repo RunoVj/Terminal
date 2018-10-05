@@ -38,6 +38,8 @@ private:
 
     Ui::MainWindow *ui;
     QTimer *_send_timer;
+    QTimer *_stress_test_timer;
+    int stress_test_numb;
 
     QLabel *_status;
     SettingsDialog *settings;
@@ -68,12 +70,13 @@ private slots:
     void on_verticalSliderFrequency_valueChanged(int value);
     void on_verticalSliderPosition_valueChanged(int value);
 
+    void stress_test_timer_timeout(void);
+
     void request();
     void config_request();
     void open_hex();
 
     void flash();
-
 };
 
 #endif // MAINWINDOW_H
