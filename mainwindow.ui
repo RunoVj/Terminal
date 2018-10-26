@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>859</width>
-    <height>709</height>
+    <height>724</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -390,7 +390,7 @@
             <item>
              <widget class="QCheckBox" name="checkBoxUpdateFirmware">
               <property name="text">
-               <string>Update firmware</string>
+               <string>Go to bootloader</string>
               </property>
              </widget>
             </item>
@@ -400,7 +400,7 @@
                <string>Enable current thresholds</string>
               </property>
               <property name="checked">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -471,6 +471,42 @@
                <widget class="QSpinBox" name="spinBoxSetAddress">
                 <property name="maximum">
                  <number>8</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_10">
+              <item>
+               <widget class="QLabel" name="label_14">
+                <property name="text">
+                 <string>Clockwise correction k</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBoxClockwiseK">
+                <property name="maximum">
+                 <number>10000</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="QLabel" name="label_15">
+                <property name="text">
+                 <string>Counterclockwise correction k</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBoxCounterClockwiseK">
+                <property name="maximum">
+                 <number>10000</number>
                 </property>
                </widget>
               </item>
@@ -890,7 +926,7 @@
      <x>0</x>
      <y>0</y>
      <width>859</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCalls">

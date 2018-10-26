@@ -64,13 +64,24 @@ void MainWindow::initActionsConnections()
     connect(ui->actionOpenHexFile, &QAction::triggered,
             this, &MainWindow::open_hex);
 
-
     connect(ui->verticalSliderFrequency, &QSlider::valueChanged,
             ui->spinBoxFrequency, &QSpinBox::setValue);
     connect(ui->verticalSliderVelocity, &QSlider::valueChanged,
             [this](int value){ui->spinBoxVelocity->setValue(value);});
     connect(ui->verticalSliderSpeedK, &QSlider::valueChanged,
             ui->spinBoxSpeedK, &QSpinBox::setValue);
+
+    connect(ui->verticalSliderSpeedK, &QSlider::valueChanged,
+            [this] (int value)
+    {
+        if (ui->verticalSliderVelocity->value() > 0) {
+            ui->spinBoxClockwiseK->setValue(value);
+        }
+        else {
+            ui->spinBoxCounterClockwiseK->setValue(value);
+        }
+    });
+
     connect(ui->dialAngle, &QDial::valueChanged,
             ui->spinBoxPosition, &QSpinBox::setValue);
     connect(ui->dialOutrunningAngle, &QDial::valueChanged,
