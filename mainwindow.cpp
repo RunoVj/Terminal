@@ -137,7 +137,8 @@ void MainWindow::initActionsConnections()
     {
         if (checked) {
             _stress_test_timer = new QTimer;
-            connect(_stress_test_timer, &QTimer::timeout, this, &MainWindow::stress_test_timer_timeout);
+            connect(_stress_test_timer, &QTimer::timeout,
+                    this, &MainWindow::stress_test_timer_timeout);
             _stress_test_timer->start(static_cast<int>(1000/ui->spinBoxStressFrequency->value()));
             stress_test_numb = ui->spinBoxStressTestDuration->value()*
                     ui->spinBoxStressFrequency->value();
@@ -145,9 +146,15 @@ void MainWindow::initActionsConnections()
         else {
             _stress_test_timer->stop();
             delete _stress_test_timer;
-            disconnect(_stress_test_timer, &QTimer::timeout, this, &MainWindow::stress_test_timer_timeout);
+            disconnect(_stress_test_timer, &QTimer::timeout,
+                       this, &MainWindow::stress_test_timer_timeout);
         }
     });
+
+    // set new address according to current communication address
+    connect(ui->spinBoxCurrentAddress,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            ui->spinBoxSetAddress, &QSpinBox::setValue);
 }
 
 void MainWindow::openSerialPort()
