@@ -71,16 +71,9 @@ void MainWindow::initActionsConnections()
     connect(ui->verticalSliderSpeedK, &QSlider::valueChanged,
             ui->spinBoxSpeedK, &QSpinBox::setValue);
 
+    // set new value in speed correction
     connect(ui->verticalSliderSpeedK, &QSlider::valueChanged,
-            [this] (int value)
-    {
-        if (ui->verticalSliderVelocity->value() > 0) {
-            ui->spinBoxClockwiseK->setValue(value);
-        }
-        else {
-            ui->spinBoxCounterClockwiseK->setValue(value);
-        }
-    });
+            this, &MainWindow::update_correction);
 
     connect(ui->dialAngle, &QDial::valueChanged,
             ui->spinBoxPosition, &QSpinBox::setValue);
@@ -121,7 +114,7 @@ void MainWindow::initActionsConnections()
 
     });
 
-    connect(ui->pushButtonSetAddress, &QPushButton::clicked,
+    connect(ui->pushButtonSetConfig, &QPushButton::clicked,
             this, &MainWindow::config_request);
 
     // flashing
@@ -133,28 +126,17 @@ void MainWindow::initActionsConnections()
             this, &MainWindow::disable_current_thresholds);
 
     // run stress test cycle
-    connect(ui->pushButtonRunStressTest, &QPushButton::toggled, [this](bool checked)
-    {
-        if (checked) {
-            _stress_test_timer = new QTimer;
-            connect(_stress_test_timer, &QTimer::timeout,
-                    this, &MainWindow::stress_test_timer_timeout);
-            _stress_test_timer->start(static_cast<int>(1000/ui->spinBoxStressFrequency->value()));
-            stress_test_numb = ui->spinBoxStressTestDuration->value()*
-                    ui->spinBoxStressFrequency->value();
-        }
-        else {
-            _stress_test_timer->stop();
-            delete _stress_test_timer;
-            disconnect(_stress_test_timer, &QTimer::timeout,
-                       this, &MainWindow::stress_test_timer_timeout);
-        }
-    });
+    connect(ui->pushButtonRunStressTest, &QPushButton::toggled,
+            this, &MainWindow::stress_test);
 
     // set new address according to current communication address
     connect(ui->spinBoxCurrentAddress,
             static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             ui->spinBoxSetAddress, &QSpinBox::setValue);
+    // enable setting new speed_k correction
+    connect(ui->checkBoxUpdateCorrection, &QCheckBox::stateChanged,
+            this, &MainWindow::allow_correction);
+
 }
 
 void MainWindow::openSerialPort()
@@ -202,13 +184,40 @@ void MainWindow::request()
 {    
     QByteArray msg_buf;
     QDataStream stream(&msg_buf, QIODevice::Append);
+
+    if (_next_mes_type == CONFIG_REQUEST_TYPE) {
+
+    }
+    else if (ui->radioButtonNormalRequest->isChecked()) {
+        _next_mes_type = NORMAL_REQUEST_TYPE;
+    }
+    else if (ui->radioButtonTerminalRequest->isChecked()) {
+        _next_mes_type = TERMINAL_REQUEST_TYPE;
+    }
+
     // fill request structure
     if (_next_mes_type == NORMAL_REQUEST_TYPE) {
         _cur_mes_type = NORMAL_REQUEST_TYPE;
-
         Request req;
         req.AA = 0xAA;
         req.type = NORMAL_REQUEST_TYPE;
+        if (ui->checkBoxCircleMode->isChecked()) {
+            req.address = ui->spinBoxCurrentAddress->value();
+            uint8_t next_addr = (ui->spinBoxCurrentAddress->value() + 1) % 9;
+            ui->spinBoxCurrentAddress->setValue(next_addr);
+        }
+        else {
+            req.address = ui->spinBoxCurrentAddress->value();
+        }
+        req.velocity = ui->verticalSliderVelocity->value();
+        stream << req;
+    }
+    else if (_next_mes_type == TERMINAL_REQUEST_TYPE) {
+        _cur_mes_type = TERMINAL_REQUEST_TYPE;
+
+        TerminalRequest req;
+        req.AA = 0xAA;
+        req.type = TERMINAL_REQUEST_TYPE;
         if (ui->checkBoxCircleMode->isChecked()) {
             req.address = ui->spinBoxCurrentAddress->value();
             uint8_t next_addr = (ui->spinBoxCurrentAddress->value() + 1) % 9;
@@ -225,8 +234,14 @@ void MainWindow::request()
 
         req.outrunning_angle = ui->dialOutrunningAngle->value();
         req.update_base_vector = ui->checkBoxUpdateBaseVector->isChecked();
-        req.speed_k = ui->verticalSliderSpeedK->value();
 
+        req.update_speed_k = ui->checkBoxUpdateCorrection->isChecked();
+        if (req.velocity > 0) {
+            req.speed_k = ui->spinBoxClockwiseK->value();
+        }
+        else {
+            req.speed_k = ui->spinBoxCounterclockwiseK->value();
+        }
         // move to QByteArray
         stream << req;
     }
@@ -254,6 +269,9 @@ void MainWindow::request()
         conf_req.average_threshold = static_cast<uint16_t>(
                     ui->lineEditCurrentAverageThreshold->text().toInt());
 
+        conf_req.update_correction = ui->checkBoxUpdateCorrection->isChecked();
+        conf_req.clockwise_speed_k = ui->spinBoxClockwiseK->value();
+        conf_req.counterclockwise_speed_k = ui->spinBoxCounterclockwiseK->value();
 
         // move to QByteArray
         stream << conf_req;
@@ -287,7 +305,6 @@ void MainWindow::request()
                                      "Firmware upgrade complited!");
             _next_mes_type = NORMAL_REQUEST_TYPE;
         }
-
         stream << firmware_req;
     }
 
@@ -324,30 +341,75 @@ void MainWindow::readData()
         ui->plainTextEditReceive->appendPlainText(data.toHex().toUpper());
     }
 
-    QDataStream stream(&data, QIODevice::ReadOnly);;
+    QDataStream stream(&data, QIODevice::ReadOnly);
 
-    if (_cur_mes_type == FIRMWARE_REQUEST_TYPE) {
-        struct FirmwareResponse resp;
+    // calculate CRC
+    uint8_t crc = 0;
+
+    // 0xAA doesn't include in CRC calculation
+    for (int i = 1; i < data.size() - 1; i++){
+        crc ^= data[i];
     }
-    else {
+
+    if (_cur_mes_type == NORMAL_REQUEST_TYPE) {
         struct Response resp;
 
         stream >> resp;
 
-        ui->lineEditAddress->setText(QString::number(resp.address));
-        float current_in_amp = (resp.current - MAX_CURRENT/2)/CURRENT_COEF;
-        ui->lineEditCurrent->setText(QString::number(current_in_amp) + " A (" +
-                                     QString::number(resp.current) + " ADC)");
-
-        ui->lineEditState->setText(QString::number(resp.state));
-
-        ui->radioButtonSensorA->setDown(resp.position_code & 0b00000001);
-        ui->radioButtonSensorB->setDown(resp.position_code & 0b00000010);
-        ui->radioButtonSensorC->setDown(resp.position_code & 0b00000100);
-
-        ui->lineEditSpeedPeriod->setText(QString::number(resp.speed_period));
+        if (resp.CRC == crc) {
+            ui->lineEditAddress->setText(QString::number(resp.address));
+            float current_in_amp = (resp.current - MAX_CURRENT/2)/CURRENT_COEF;
+            qDebug() << "current coef: " << CURRENT_COEF
+                     << "\nCurrent in amp: " << current_in_amp;
+            ui->lineEditCurrent->setText(QString::number(current_in_amp, 'f', 3)
+                                         + " A (" + QString::number(
+                                             resp.current) + " ADC)");
+            ui->lineEditState->setText(QString::number(resp.state));
+            ui->lineEditSpeedPeriod->setText(QString::number(resp.speed_period));
+        }
+        else {
+            ui->plainTextEditReceive->appendPlainText(QString("Incorrect CRC"));
+            ui->plainTextEditReceive->appendPlainText(QString("Calculated CRC: ")
+                                                      + QString::number(crc)
+                                                      + QString("Income CRC:")
+                                                      + QString::number(resp.CRC));
+        }
     }
+    else if (_cur_mes_type == TERMINAL_REQUEST_TYPE) {
+        struct TerminalResponse resp;
 
+        stream >> resp;
+
+        if (resp.CRC == crc) {
+            ui->lineEditAddress->setText(QString::number(resp.address));
+            float current_in_amp = (resp.current - MAX_CURRENT/2)/CURRENT_COEF;
+            qDebug() << "current coef: " << CURRENT_COEF
+                     << "\nCurrent in amp: " << current_in_amp;
+            ui->lineEditCurrent->setText(QString::number(current_in_amp, 'f', 3)
+                                         + " A (" + QString::number(
+                                             resp.current) + " ADC)");
+
+            ui->lineEditState->setText(QString::number(resp.state));
+
+            ui->radioButtonSensorA->setDown(resp.position_code & 0b00000001);
+            ui->radioButtonSensorB->setDown(resp.position_code & 0b00000010);
+            ui->radioButtonSensorC->setDown(resp.position_code & 0b00000100);
+
+            ui->lineEditSpeedPeriod->setText(QString::number(resp.speed_period));
+
+            if (!ui->checkBoxUpdateCorrection->isChecked()) {
+                ui->spinBoxClockwiseK->setValue(resp.clockwise_speed_k);
+                ui->spinBoxCounterclockwiseK->setValue(
+                            resp.counterclockwise_speed_k);
+            }
+        }
+        else {
+            ui->plainTextEditReceive->appendPlainText(QString("Incorrect CRC"));
+        }
+    }
+    else if (_cur_mes_type == FIRMWARE_REQUEST_TYPE) {
+        struct FirmwareResponse resp;
+    }
 }
 
 void MainWindow::open_hex()
@@ -444,3 +506,43 @@ void MainWindow::stress_test_timer_timeout()
         _stress_test_timer->stop();
     }
 }
+
+void MainWindow::stress_test(bool enable)
+{
+    if (enable) {
+        _stress_test_timer = new QTimer;
+        connect(_stress_test_timer, &QTimer::timeout,
+                this, &MainWindow::stress_test_timer_timeout);
+        _stress_test_timer->start(static_cast<int>(1000/ui->spinBoxStressFrequency->value()));
+        stress_test_numb = ui->spinBoxStressTestDuration->value()*
+                ui->spinBoxStressFrequency->value();
+    }
+    else {
+        _stress_test_timer->stop();
+        delete _stress_test_timer;
+        disconnect(_stress_test_timer, &QTimer::timeout,
+                   this, &MainWindow::stress_test_timer_timeout);
+    }
+}
+
+void MainWindow::allow_correction(bool enable)
+{
+    ui->labelClockwiseCorrection->setEnabled(enable);
+    ui->labelCounterclockwiseCorrection->setEnabled(enable);
+    ui->spinBoxClockwiseK->setEnabled(enable);
+    ui->spinBoxCounterclockwiseK->setEnabled(enable);
+}
+
+void MainWindow::update_correction(int value)
+{
+    if (!ui->checkBoxUpdateCorrection->isChecked()) {
+        return;
+    }
+
+    if (ui->verticalSliderVelocity->value() > 0) {
+        ui->spinBoxClockwiseK->setValue(value);
+    }
+    else {
+        ui->spinBoxCounterclockwiseK->setValue(value);
+    }
+};

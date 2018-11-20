@@ -71,12 +71,15 @@ private slots:
     void on_verticalSliderPosition_valueChanged(int value);
 
     void stress_test_timer_timeout(void);
+    void allow_correction(bool enable);
+    void update_correction(int value);
 
     void request();
     void config_request();
     void open_hex();
 
     void flash();
+    void stress_test(bool enable);
 };
 
 #endif // MAINWINDOW_H
