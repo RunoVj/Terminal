@@ -6,7 +6,7 @@
 #include <QVector>
 
 #define REQUEST_DELAY                       10
-#define RESPONSE_DELAY                      8
+#define RESPONSE_DELAY                      9
 #define MAX_CURRENT                         4095
 #define MAX_CURRENT_A                       30
 #define SENSOR_OFFSET                       0.9

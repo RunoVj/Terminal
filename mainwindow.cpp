@@ -156,12 +156,15 @@ void MainWindow::openSerialPort()
                           .arg(p.name).arg(p.stringBaudRate)
                           .arg(p.stringDataBits).arg(p.stringParity)
                           .arg(p.stringStopBits).arg(p.stringFlowControl));
-        _send_timer->start(REQUEST_DELAY);
+        _send_timer->start(ui->comboBoxCommunicationPeriod->currentText().toInt());
+        qDebug() << "Period: " << ui->comboBoxCommunicationPeriod->currentText().toInt();
     } else {
         QMessageBox::critical(this, tr("Error"), serial->errorString());
 
         showStatusMessage(tr("Open error"));
     }
+
+    ui->comboBoxCommunicationPeriod->setEnabled(false);
 }
 
 void MainWindow::closeSerialPort()
@@ -173,6 +176,8 @@ void MainWindow::closeSerialPort()
     ui->actionConfigure->setEnabled(true);
     showStatusMessage(tr("Disconnected"));
     _send_timer->stop();
+
+    ui->comboBoxCommunicationPeriod->setEnabled(true);
 }
 
 void MainWindow::writeData(const QByteArray &data)
@@ -186,6 +191,9 @@ void MainWindow::request()
     QDataStream stream(&msg_buf, QIODevice::Append);
 
     if (_next_mes_type == CONFIG_REQUEST_TYPE) {
+
+    }
+    else if (_next_mes_type == FIRMWARE_REQUEST_TYPE) {
 
     }
     else if (ui->radioButtonNormalRequest->isChecked()) {
@@ -333,7 +341,7 @@ void MainWindow::readData()
     qDebug() << "read data";
     QByteArray data;
 
-    if (serial->waitForReadyRead(RESPONSE_DELAY)){
+    if (serial->waitForReadyRead(ui->comboBoxCommunicationPeriod->currentText().toInt() - 1)){
         data = serial->readAll();
         qDebug() << "read bytes - " << data.toHex();
     }
