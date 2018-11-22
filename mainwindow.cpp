@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _period = ui->verticalSliderFrequency->value();
     _cur_mes_type = _next_mes_type = NORMAL_REQUEST_TYPE;
     _firmware.clear();
+    _firm_req_index = 0;
 
 
     ui->actionConnect->setEnabled(true);
@@ -157,7 +158,6 @@ void MainWindow::openSerialPort()
                           .arg(p.stringDataBits).arg(p.stringParity)
                           .arg(p.stringStopBits).arg(p.stringFlowControl));
         _send_timer->start(ui->comboBoxCommunicationPeriod->currentText().toInt());
-        qDebug() << "Period: " << ui->comboBoxCommunicationPeriod->currentText().toInt();
     } else {
         QMessageBox::critical(this, tr("Error"), serial->errorString());
 
@@ -306,12 +306,15 @@ void MainWindow::request()
         firmware_req.address = ui->spinBoxCurrentAddress->value();
         firmware_req.force_update = ui->checkBoxForceSettingAddress->isChecked();
         firmware_req.get_response = ui->checkBoxSendResponse->isChecked();
+        firmware_req.index = _firm_req_index;
+        qDebug() << "Firmware req index: " << _firm_req_index;
         firmware_req.hex = hex_line;
 
         if (_firmware.isEmpty()) {
             QMessageBox::information(this, "title",
                                      "Firmware upgrade complited!");
             _next_mes_type = NORMAL_REQUEST_TYPE;
+            _firm_req_index = 0;
         }
         stream << firmware_req;
     }
@@ -338,12 +341,10 @@ void MainWindow::config_request()
 
 void MainWindow::readData()
 {    
-    qDebug() << "read data";
     QByteArray data;
 
     if (serial->waitForReadyRead(ui->comboBoxCommunicationPeriod->currentText().toInt() - 1)){
         data = serial->readAll();
-        qDebug() << "read bytes - " << data.toHex();
     }
     if (!data.isEmpty()) {
         ui->plainTextEditReceive->appendPlainText(data.toHex().toUpper());
@@ -367,8 +368,6 @@ void MainWindow::readData()
         if (resp.CRC == crc) {
             ui->lineEditAddress->setText(QString::number(resp.address));
             float current_in_amp = (resp.current - MAX_CURRENT/2)/CURRENT_COEF;
-            qDebug() << "current coef: " << CURRENT_COEF
-                     << "\nCurrent in amp: " << current_in_amp;
             ui->lineEditCurrent->setText(QString::number(current_in_amp, 'f', 3)
                                          + " A (" + QString::number(
                                              resp.current) + " ADC)");
@@ -391,8 +390,6 @@ void MainWindow::readData()
         if (resp.CRC == crc) {
             ui->lineEditAddress->setText(QString::number(resp.address));
             float current_in_amp = (resp.current - MAX_CURRENT/2)/CURRENT_COEF;
-            qDebug() << "current coef: " << CURRENT_COEF
-                     << "\nCurrent in amp: " << current_in_amp;
             ui->lineEditCurrent->setText(QString::number(current_in_amp, 'f', 3)
                                          + " A (" + QString::number(
                                              resp.current) + " ADC)");
@@ -417,6 +414,21 @@ void MainWindow::readData()
     }
     else if (_cur_mes_type == FIRMWARE_REQUEST_TYPE) {
         struct FirmwareResponse resp;
+        stream >> resp;
+
+        if (resp.index != _firm_req_index) {
+            QMessageBox::warning(this, "title", QString(
+                                     "Firmware update failed!\nSended package id: "
+                                     + QString::number(this->_firm_req_index)
+                                     + "\nReceived package id: "
+                                     + QString::number(resp.index)));
+            _firm_req_index = 0;
+            _next_mes_type = NORMAL_REQUEST_TYPE;
+        }
+        else {
+            qDebug() << "okkkk";
+            ++_firm_req_index;
+        }
     }
 }
 
@@ -471,19 +483,16 @@ void MainWindow::showStatusMessage(const QString &message)
 void MainWindow::on_verticalSliderVelocity_valueChanged(int value)
 {
     _pwm_duty = value;
-    qDebug() << "pwm duty = " << _pwm_duty << "\n";
 }
 
 void MainWindow::on_verticalSliderPosition_valueChanged(int value)
 {
     _position = value;
-    qDebug() << "position = " << _position << "\n";
 }
 
 void MainWindow::on_verticalSliderFrequency_valueChanged(int value)
 {
     _period = value;
-    qDebug() << "period = " << _period << "\n";
 }
 
 void MainWindow::disable_current_thresholds(bool enable_thresholds)

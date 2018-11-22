@@ -48,6 +48,8 @@ private:
     uint8_t _cur_mes_type;
     uint8_t _next_mes_type;
 
+    uint16_t _firm_req_index;
+
     uint8_t _pwm_duty;
     uint8_t _position;
     uint8_t _period;

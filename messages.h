@@ -262,6 +262,7 @@ struct FirmwaregRequest
     uint8_t address;
     uint8_t force_update; // update even if address doesn't equal BLDC address
     uint8_t get_response; // send status
+    uint16_t index;
     //hex
 
     struct IntelHEX
@@ -283,6 +284,7 @@ struct FirmwaregRequest
         ds << req.address;
         ds << req.force_update;
         ds << req.get_response;
+        ds << req.index;
         ds << req.hex._data_size;
         ds << req.hex.start_address;
         ds << req.hex.operation_type;
@@ -302,6 +304,7 @@ struct FirmwaregRequest
         ds >> req.address;
         ds >> req.force_update;
         ds >> req.get_response;
+        ds >> req.index;
         ds >> req.hex._data_size;
         ds >> req.hex.start_address;
         ds >> req.hex.operation_type;
@@ -339,23 +342,28 @@ struct FirmwareResponse
     uint8_t type; // 0x04
     uint8_t address;
     uint8_t status;
+    uint16_t index;
     uint8_t CRC;
 
     friend QDataStream& operator<<(QDataStream &ds, const FirmwareResponse &resp)
     {
+        ds.setByteOrder(QDataStream::LittleEndian);
         ds << resp.AA;
         ds << resp.type;
         ds << resp.address;
         ds << resp.status;
+        ds << resp.index;
         return ds;
     }
 
     friend QDataStream& operator>>(QDataStream &ds, FirmwareResponse &resp)
     {
+        ds.setByteOrder(QDataStream::LittleEndian);
         ds >> resp.AA;
         ds >> resp.type;
         ds >> resp.address;
         ds >> resp.status;
+        ds >> resp.index;
         ds >> resp.CRC;
         return ds;
     }
