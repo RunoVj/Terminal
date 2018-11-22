@@ -378,7 +378,7 @@ void MainWindow::readData()
             ui->plainTextEditReceive->appendPlainText(QString("Incorrect CRC"));
             ui->plainTextEditReceive->appendPlainText(QString("Calculated CRC: ")
                                                       + QString::number(crc)
-                                                      + QString("Income CRC:")
+                                                      + QString("\nIncome CRC:")
                                                       + QString::number(resp.CRC));
         }
     }
