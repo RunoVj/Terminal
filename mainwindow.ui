@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1014</width>
-    <height>829</height>
+    <width>834</width>
+    <height>775</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -282,6 +282,12 @@
            <layout class="QVBoxLayout" name="verticalLayout_16">
             <item>
              <widget class="QCheckBox" name="checkBoxForceSettingAddress">
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="toolTip">
                <string/>
               </property>
@@ -292,6 +298,12 @@
             </item>
             <item>
              <widget class="QCheckBox" name="checkBoxUpdateFirmware">
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>100</height>
+               </size>
+              </property>
               <property name="text">
                <string>Go to bootloader</string>
               </property>
@@ -299,6 +311,18 @@
             </item>
             <item>
              <widget class="QRadioButton" name="radioButtonEnableCurrentThresholds">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
                <string>Enable current thresholds</string>
               </property>
@@ -317,7 +341,7 @@
                    <string>High impulse threshold</string>
                   </property>
                   <property name="wordWrap">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>
@@ -333,11 +357,17 @@
                 </item>
                 <item>
                  <widget class="QLabel" name="label_10">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="text">
                    <string>Average current threshold</string>
                   </property>
                   <property name="wordWrap">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>
@@ -354,22 +384,15 @@
                </layout>
               </item>
               <item>
-               <spacer name="horizontalSpacer_4">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
                <layout class="QVBoxLayout" name="verticalLayout_8">
                 <item>
                  <widget class="QLineEdit" name="lineEditCurrentHighThreshold">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="text">
                    <string>3686</string>
                   </property>
@@ -377,6 +400,12 @@
                 </item>
                 <item>
                  <widget class="QLineEdit" name="lineEditCurrentLowThreshold">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>100</height>
+                   </size>
+                  </property>
                   <property name="text">
                    <string>410</string>
                   </property>
@@ -384,6 +413,18 @@
                 </item>
                 <item>
                  <widget class="QLineEdit" name="lineEditCurrentAverageThreshold">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="text">
                    <string>3000</string>
                   </property>
@@ -391,6 +432,12 @@
                 </item>
                 <item>
                  <widget class="QSpinBox" name="spinBoxSetAddress">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="maximum">
                    <number>8</number>
                   </property>
@@ -404,6 +451,18 @@
              <layout class="QHBoxLayout" name="horizontalLayout_10">
               <item>
                <widget class="QCheckBox" name="checkBoxUpdateCorrection">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16000</width>
+                  <height>16000</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>New correction</string>
                 </property>
@@ -419,6 +478,12 @@
                      <widget class="QLabel" name="labelClockwiseCorrection">
                       <property name="enabled">
                        <bool>false</bool>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777215</height>
+                       </size>
                       </property>
                       <property name="text">
                        <string>Clockwise correction k</string>
@@ -465,6 +530,12 @@
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>40</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
                       <property name="maximum">
                        <number>65565</number>
                       </property>
@@ -474,6 +545,12 @@
                      <widget class="QSpinBox" name="spinBoxCounterclockwiseK">
                       <property name="enabled">
                        <bool>false</bool>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>40</width>
+                        <height>16777215</height>
+                       </size>
                       </property>
                       <property name="maximum">
                        <number>10000</number>
@@ -490,6 +567,12 @@
             </item>
             <item>
              <widget class="QPushButton" name="pushButtonSetConfig">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>Set config</string>
               </property>
@@ -951,8 +1034,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1014</width>
-     <height>22</height>
+     <width>834</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCalls">
@@ -1065,7 +1148,7 @@
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>
