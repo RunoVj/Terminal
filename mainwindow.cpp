@@ -50,6 +50,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initActionsConnections()
 {
+    // action connects
     connect(ui->actionConnect, &QAction::triggered,
             this, &MainWindow::openSerialPort);
     connect(ui->actionDisconnect, &QAction::triggered,
@@ -64,6 +65,16 @@ void MainWindow::initActionsConnections()
             [this](void){ui->plainTextEditTransmit->clear();});
     connect(ui->actionOpenHexFile, &QAction::triggered,
             this, &MainWindow::open_hex);
+    connect(ui->actionViewCharts, &QAction::triggered,
+            [this](bool checked)
+    {
+        if (!checked) {
+            ui->TerminalStackWidget->setCurrentWidget(ui->TerminalWidget);
+        }
+        else {
+            ui->TerminalStackWidget->setCurrentWidget(ui->page);
+        }
+    });
 
     connect(ui->verticalSliderFrequency, &QSlider::valueChanged,
             ui->spinBoxFrequency, &QSpinBox::setValue);

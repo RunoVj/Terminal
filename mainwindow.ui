@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>834</width>
-    <height>775</height>
+    <width>965</width>
+    <height>824</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,773 +25,806 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_22">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_19">
+     <layout class="QHBoxLayout" name="horizontalLayoutMainWindow">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_12">
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_13">
+       <widget class="QStackedWidget" name="TerminalStackWidget">
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
+        <widget class="QWidget" name="TerminalWidget" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_12">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_20">
+           <widget class="QWidget" name="DateFlowWidget" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_13">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_20">
+               <item>
+                <widget class="QLabel" name="label_6">
+                 <property name="text">
+                  <string>Receive</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_7">
+                 <property name="text">
+                  <string>Transmit</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_21">
+               <item>
+                <widget class="QPlainTextEdit" name="plainTextEditReceive">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>150</height>
+                  </size>
+                 </property>
+                 <property name="textInteractionFlags">
+                  <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPlainTextEdit" name="plainTextEditTransmit">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>150</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_22">
             <item>
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>Receive</string>
-              </property>
+             <widget class="QWidget" name="MotorDisplayWidget" native="true">
+              <layout class="QVBoxLayout" name="verticalLayout_14">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_29">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_17">
+                   <item>
+                    <widget class="QLabel" name="labelSensorA">
+                     <property name="text">
+                      <string>Code A</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="labelSensorB">
+                     <property name="text">
+                      <string>Code B</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="labelSensorC">
+                     <property name="text">
+                      <string>Code C</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_18">
+                   <item>
+                    <widget class="QRadioButton" name="radioButtonSensorA">
+                     <property name="acceptDrops">
+                      <bool>false</bool>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="checkable">
+                      <bool>false</bool>
+                     </property>
+                     <property name="autoExclusive">
+                      <bool>false</bool>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">buttonGroup_2</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="radioButtonSensorB">
+                     <property name="mouseTracking">
+                      <bool>false</bool>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="checkable">
+                      <bool>false</bool>
+                     </property>
+                     <property name="autoExclusive">
+                      <bool>false</bool>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">buttonGroup_2</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="radioButtonSensorC">
+                     <property name="mouseTracking">
+                      <bool>false</bool>
+                     </property>
+                     <property name="autoFillBackground">
+                      <bool>false</bool>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="checkable">
+                      <bool>false</bool>
+                     </property>
+                     <property name="autoExclusive">
+                      <bool>false</bool>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">buttonGroup_2</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_24">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_7">
+                   <item>
+                    <widget class="QLabel" name="label_Address">
+                     <property name="text">
+                      <string>Address</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_GrayCode">
+                     <property name="text">
+                      <string>Current position code</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_State">
+                     <property name="text">
+                      <string>Current state</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_Current">
+                     <property name="text">
+                      <string>Current</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_CommutationPeriod">
+                     <property name="text">
+                      <string>Commutation period</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="labelSpeedPeriod">
+                     <property name="text">
+                      <string>Speed period</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_6">
+                   <item>
+                    <widget class="QLineEdit" name="lineEditAddress">
+                     <property name="readOnly">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="lineEditGrayCode">
+                     <property name="readOnly">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="lineEditState">
+                     <property name="readOnly">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="lineEditCurrent">
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="readOnly">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="lineEditCommutationPeriod">
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="readOnly">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="lineEditSpeedPeriod"/>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_7">
-              <property name="text">
-               <string>Transmit</string>
-              </property>
+             <widget class="QWidget" name="MotorSettingsWidget" native="true">
+              <layout class="QVBoxLayout" name="verticalLayout_16">
+               <item>
+                <widget class="QCheckBox" name="checkBoxForceSettingAddress">
+                 <property name="maximumSize">
+                  <size>
+                   <width>100</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string>Force address </string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkBoxUpdateFirmware">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16000</width>
+                   <height>16000</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Go to bootloader</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButtonEnableCurrentThresholds">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Enable current thresholds</string>
+                 </property>
+                 <property name="checked">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_9">
+                   <item>
+                    <widget class="QLabel" name="label_5">
+                     <property name="text">
+                      <string>High impulse threshold</string>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>false</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_9">
+                     <property name="text">
+                      <string>Low impulse threshold</string>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_10">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>Average current threshold</string>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>false</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_4">
+                     <property name="text">
+                      <string>New address</string>
+                     </property>
+                     <property name="wordWrap">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_8">
+                   <item>
+                    <widget class="QLineEdit" name="lineEditCurrentHighThreshold">
+                     <property name="maximumSize">
+                      <size>
+                       <width>50</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>3686</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="lineEditCurrentLowThreshold">
+                     <property name="maximumSize">
+                      <size>
+                       <width>50</width>
+                       <height>100</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>410</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="lineEditCurrentAverageThreshold">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>50</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>3000</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSpinBox" name="spinBoxSetAddress">
+                     <property name="maximumSize">
+                      <size>
+                       <width>50</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="maximum">
+                      <number>8</number>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <widget class="QCheckBox" name="checkBoxUpdateCorrection">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16000</width>
+                     <height>16000</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>New correction</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_5">
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_12">
+                     <item>
+                      <layout class="QVBoxLayout" name="verticalLayout_11">
+                       <item>
+                        <widget class="QLabel" name="labelClockwiseCorrection">
+                         <property name="enabled">
+                          <bool>false</bool>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>100</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>Clockwise correction k</string>
+                         </property>
+                         <property name="textFormat">
+                          <enum>Qt::AutoText</enum>
+                         </property>
+                         <property name="wordWrap">
+                          <bool>true</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="labelCounterclockwiseCorrection">
+                         <property name="enabled">
+                          <bool>false</bool>
+                         </property>
+                         <property name="acceptDrops">
+                          <bool>false</bool>
+                         </property>
+                         <property name="text">
+                          <string>Counterclockwise correction k</string>
+                         </property>
+                         <property name="scaledContents">
+                          <bool>true</bool>
+                         </property>
+                         <property name="wordWrap">
+                          <bool>true</bool>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                     <item>
+                      <layout class="QVBoxLayout" name="verticalLayout_10">
+                       <item>
+                        <widget class="QSpinBox" name="spinBoxClockwiseK">
+                         <property name="enabled">
+                          <bool>false</bool>
+                         </property>
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>40</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="maximum">
+                          <number>65565</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QSpinBox" name="spinBoxCounterclockwiseK">
+                         <property name="enabled">
+                          <bool>false</bool>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>40</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="maximum">
+                          <number>10000</number>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButtonSetConfig">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Set config</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QWidget" name="MotorControlWidget" native="true">
+              <layout class="QVBoxLayout" name="verticalLayout_19">
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_3">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_13">
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_24">
+                     <item>
+                      <widget class="QLabel" name="label_14">
+                       <property name="text">
+                        <string>Communication period</string>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_3">
+                       <property name="text">
+                        <string>Communicate with</string>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_12">
+                       <property name="text">
+                        <string>Stress test duration, s</string>
+                       </property>
+                       <property name="wordWrap">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_13">
+                       <property name="text">
+                        <string>Frequency, Hz</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_23">
+                     <item>
+                      <widget class="QComboBox" name="comboBoxCommunicationPeriod">
+                       <item>
+                        <property name="text">
+                         <string>10</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>12</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>15</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>20</string>
+                        </property>
+                       </item>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QSpinBox" name="spinBoxCurrentAddress">
+                       <property name="maximum">
+                        <number>8</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QSpinBox" name="spinBoxStressFrequency">
+                       <property name="minimum">
+                        <number>1</number>
+                       </property>
+                       <property name="maximum">
+                        <number>50</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QSpinBox" name="spinBoxStressTestDuration">
+                       <property name="minimum">
+                        <number>30</number>
+                       </property>
+                       <property name="maximum">
+                        <number>60</number>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="radioButtonNormalRequest">
+                   <property name="text">
+                    <string>Normal request</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">buttonGroup</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="radioButtonTerminalRequest">
+                   <property name="text">
+                    <string>Terminal request</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">buttonGroup</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButtonRunStressTest">
+                   <property name="text">
+                    <string>Run stress test</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBoxCircleMode">
+                   <property name="text">
+                    <string>Circle mode</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBoxUpdateBaseVector">
+                   <property name="text">
+                    <string>Update base vectors</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBoxSendResponse">
+                   <property name="toolTip">
+                    <string>Enable during firmware update</string>
+                   </property>
+                   <property name="statusTip">
+                    <string/>
+                   </property>
+                   <property name="whatsThis">
+                    <string/>
+                   </property>
+                   <property name="inputMethodHints">
+                    <set>Qt::ImhNone</set>
+                   </property>
+                   <property name="text">
+                    <string>Bootloader response</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButtonFlash">
+                   <property name="text">
+                    <string>Flash</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
              </widget>
             </item>
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_21">
+           <layout class="QVBoxLayout" name="verticalLayout_20">
             <item>
-             <widget class="QPlainTextEdit" name="plainTextEditReceive">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>150</height>
-               </size>
-              </property>
-              <property name="textInteractionFlags">
-               <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPlainTextEdit" name="plainTextEditTransmit">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>150</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_22">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_23">
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_14">
+             <layout class="QHBoxLayout" name="horizontalLayout_32">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_29">
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_17">
-                  <item>
-                   <widget class="QLabel" name="labelSensorA">
-                    <property name="text">
-                     <string>Code A</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelSensorB">
-                    <property name="text">
-                     <string>Code B</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelSensorC">
-                    <property name="text">
-                     <string>Code C</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_18">
-                  <item>
-                   <widget class="QRadioButton" name="radioButtonSensorA">
-                    <property name="acceptDrops">
-                     <bool>false</bool>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="checkable">
-                     <bool>false</bool>
-                    </property>
-                    <property name="autoExclusive">
-                     <bool>false</bool>
-                    </property>
-                    <attribute name="buttonGroup">
-                     <string notr="true">buttonGroup_2</string>
-                    </attribute>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QRadioButton" name="radioButtonSensorB">
-                    <property name="mouseTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="checkable">
-                     <bool>false</bool>
-                    </property>
-                    <property name="autoExclusive">
-                     <bool>false</bool>
-                    </property>
-                    <attribute name="buttonGroup">
-                     <string notr="true">buttonGroup_2</string>
-                    </attribute>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QRadioButton" name="radioButtonSensorC">
-                    <property name="mouseTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="autoFillBackground">
-                     <bool>false</bool>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="checkable">
-                     <bool>false</bool>
-                    </property>
-                    <property name="autoExclusive">
-                     <bool>false</bool>
-                    </property>
-                    <attribute name="buttonGroup">
-                     <string notr="true">buttonGroup_2</string>
-                    </attribute>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_24">
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_7">
-                  <item>
-                   <widget class="QLabel" name="label_Address">
-                    <property name="text">
-                     <string>Address</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_GrayCode">
-                    <property name="text">
-                     <string>Current position code</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_State">
-                    <property name="text">
-                     <string>Current state</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_Current">
-                    <property name="text">
-                     <string>Current</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_CommutationPeriod">
-                    <property name="text">
-                     <string>Commutation period</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelSpeedPeriod">
-                    <property name="text">
-                     <string>Speed period</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_6">
-                  <item>
-                   <widget class="QLineEdit" name="lineEditAddress">
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="lineEditGrayCode">
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="lineEditState">
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="lineEditCurrent">
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="lineEditCommutationPeriod">
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="lineEditSpeedPeriod"/>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_16">
-            <item>
-             <widget class="QCheckBox" name="checkBoxForceSettingAddress">
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="text">
-               <string>Force address </string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="checkBoxUpdateFirmware">
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>100</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Go to bootloader</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radioButtonEnableCurrentThresholds">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Enable current thresholds</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_4">
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_9">
-                <item>
-                 <widget class="QLabel" name="label_5">
-                  <property name="text">
-                   <string>High impulse threshold</string>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="label_9">
-                  <property name="text">
-                   <string>Low impulse threshold</string>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="label_10">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Average current threshold</string>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="label_4">
-                  <property name="text">
-                   <string>New address</string>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_8">
-                <item>
-                 <widget class="QLineEdit" name="lineEditCurrentHighThreshold">
-                  <property name="maximumSize">
-                   <size>
-                    <width>50</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>3686</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEditCurrentLowThreshold">
-                  <property name="maximumSize">
-                   <size>
-                    <width>50</width>
-                    <height>100</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>410</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEditCurrentAverageThreshold">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>50</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>3000</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="spinBoxSetAddress">
-                  <property name="maximumSize">
-                   <size>
-                    <width>50</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="maximum">
-                   <number>8</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_10">
-              <item>
-               <widget class="QCheckBox" name="checkBoxUpdateCorrection">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16000</width>
-                  <height>16000</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>New correction</string>
+               <widget class="QPlainTextEdit" name="plainTextEditHex">
+                <property name="textInteractionFlags">
+                 <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
                 </property>
                </widget>
               </item>
               <item>
-               <layout class="QVBoxLayout" name="verticalLayout_5">
+               <layout class="QVBoxLayout" name="verticalLayout">
                 <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_12">
+                 <layout class="QHBoxLayout" name="horizontalLayout_31">
                   <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_11">
-                    <item>
-                     <widget class="QLabel" name="labelClockwiseCorrection">
-                      <property name="enabled">
-                       <bool>false</bool>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>100</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>Clockwise correction k</string>
-                      </property>
-                      <property name="textFormat">
-                       <enum>Qt::AutoText</enum>
-                      </property>
-                      <property name="wordWrap">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="labelCounterclockwiseCorrection">
-                      <property name="enabled">
-                       <bool>false</bool>
-                      </property>
-                      <property name="acceptDrops">
-                       <bool>false</bool>
-                      </property>
-                      <property name="text">
-                       <string>Counterclockwise correction k</string>
-                      </property>
-                      <property name="scaledContents">
-                       <bool>true</bool>
-                      </property>
-                      <property name="wordWrap">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_10">
-                    <item>
-                     <widget class="QSpinBox" name="spinBoxClockwiseK">
-                      <property name="enabled">
-                       <bool>false</bool>
-                      </property>
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>40</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
-                      <property name="maximum">
-                       <number>65565</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QSpinBox" name="spinBoxCounterclockwiseK">
-                      <property name="enabled">
-                       <bool>false</bool>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>40</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
-                      <property name="maximum">
-                       <number>10000</number>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButtonSetConfig">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Set config</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_19">
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_3">
-              <item>
-               <widget class="QRadioButton" name="radioButtonNormalRequest">
-                <property name="text">
-                 <string>Normal request</string>
-                </property>
-                <attribute name="buttonGroup">
-                 <string notr="true">buttonGroup</string>
-                </attribute>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="radioButtonTerminalRequest">
-                <property name="text">
-                 <string>Terminal request</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-                <attribute name="buttonGroup">
-                 <string notr="true">buttonGroup</string>
-                </attribute>
-               </widget>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_13">
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_24">
-                  <item>
-                   <widget class="QLabel" name="label_14">
+                   <widget class="QRadioButton" name="radioButtonPosition">
                     <property name="text">
-                     <string>Communication period</string>
+                     <string>Setting position</string>
                     </property>
-                    <property name="wordWrap">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_3">
-                    <property name="text">
-                     <string>Communicate with</string>
-                    </property>
-                    <property name="wordWrap">
-                     <bool>true</bool>
+                    <property name="autoExclusive">
+                     <bool>false</bool>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLabel" name="label_12">
-                    <property name="text">
-                     <string>Stress test duration, s</string>
+                   <widget class="QSpinBox" name="spinBoxPosition">
+                    <property name="enabled">
+                     <bool>false</bool>
                     </property>
-                    <property name="wordWrap">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_13">
-                    <property name="text">
-                     <string>Frequency, Hz</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_23">
-                  <item>
-                   <widget class="QComboBox" name="comboBoxCommunicationPeriod">
-                    <item>
-                     <property name="text">
-                      <string>10</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>12</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>15</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>20</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QSpinBox" name="spinBoxCurrentAddress">
-                    <property name="maximum">
-                     <number>8</number>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QSpinBox" name="spinBoxStressFrequency">
                     <property name="minimum">
+                     <number>0</number>
+                    </property>
+                    <property name="maximum">
+                     <number>359</number>
+                    </property>
+                    <property name="value">
                      <number>1</number>
                     </property>
-                    <property name="maximum">
-                     <number>50</number>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QSpinBox" name="spinBoxStressTestDuration">
-                    <property name="minimum">
-                     <number>30</number>
-                    </property>
-                    <property name="maximum">
-                     <number>60</number>
-                    </property>
                    </widget>
                   </item>
                  </layout>
                 </item>
-               </layout>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButtonRunStressTest">
-                <property name="text">
-                 <string>Run stress test</string>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkBoxCircleMode">
-                <property name="text">
-                 <string>Circle mode</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkBoxUpdateBaseVector">
-                <property name="text">
-                 <string>Update base vectors</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkBoxSendResponse">
-                <property name="toolTip">
-                 <string>Enable during firmware update</string>
-                </property>
-                <property name="statusTip">
-                 <string/>
-                </property>
-                <property name="whatsThis">
-                 <string/>
-                </property>
-                <property name="inputMethodHints">
-                 <set>Qt::ImhNone</set>
-                </property>
-                <property name="text">
-                 <string>Bootloader response</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButtonFlash">
-                <property name="text">
-                 <string>Flash</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_20">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_32">
-            <item>
-             <widget class="QPlainTextEdit" name="plainTextEditHex">
-              <property name="textInteractionFlags">
-               <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_31">
                 <item>
-                 <widget class="QRadioButton" name="radioButtonPosition">
-                  <property name="text">
-                   <string>Setting position</string>
-                  </property>
-                  <property name="autoExclusive">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="spinBoxPosition">
+                 <widget class="QDial" name="dialAngle">
                   <property name="enabled">
                    <bool>false</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>150</height>
+                   </size>
                   </property>
                   <property name="minimum">
                    <number>0</number>
@@ -799,113 +832,103 @@
                   <property name="maximum">
                    <number>359</number>
                   </property>
-                  <property name="value">
+                  <property name="pageStep">
                    <number>1</number>
+                  </property>
+                  <property name="invertedControls">
+                   <bool>false</bool>
+                  </property>
+                  <property name="wrapping">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
                </layout>
               </item>
               <item>
-               <widget class="QDial" name="dialAngle">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>150</width>
-                  <height>150</height>
-                 </size>
-                </property>
-                <property name="minimum">
-                 <number>0</number>
-                </property>
-                <property name="maximum">
-                 <number>359</number>
-                </property>
-                <property name="pageStep">
-                 <number>1</number>
-                </property>
-                <property name="invertedControls">
-                 <bool>false</bool>
-                </property>
-                <property name="wrapping">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_2">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout">
+               <layout class="QVBoxLayout" name="verticalLayout_2">
                 <item>
-                 <widget class="QLabel" name="label">
-                  <property name="text">
-                   <string>Outrunning angle</string>
-                  </property>
-                 </widget>
+                 <layout class="QHBoxLayout" name="horizontalLayout">
+                  <item>
+                   <widget class="QLabel" name="label">
+                    <property name="text">
+                     <string>Outrunning angle</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="spinBoxOutrunningAngle">
+                    <property name="minimum">
+                     <number>-100</number>
+                    </property>
+                    <property name="maximum">
+                     <number>100</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
-                 <widget class="QSpinBox" name="spinBoxOutrunningAngle">
+                 <widget class="QDial" name="dialOutrunningAngle">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>150</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>248</width>
+                    <height>250</height>
+                   </size>
+                  </property>
                   <property name="minimum">
                    <number>-100</number>
                   </property>
                   <property name="maximum">
                    <number>100</number>
                   </property>
+                  <property name="pageStep">
+                   <number>1</number>
+                  </property>
+                  <property name="invertedControls">
+                   <bool>false</bool>
+                  </property>
+                  <property name="wrapping">
+                   <bool>true</bool>
+                  </property>
                  </widget>
                 </item>
                </layout>
               </item>
               <item>
-               <widget class="QDial" name="dialOutrunningAngle">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>150</width>
-                  <height>150</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>248</width>
-                  <height>250</height>
-                 </size>
-                </property>
-                <property name="minimum">
-                 <number>-100</number>
-                </property>
-                <property name="maximum">
-                 <number>100</number>
-                </property>
-                <property name="pageStep">
-                 <number>1</number>
-                </property>
-                <property name="invertedControls">
-                 <bool>false</bool>
-                </property>
-                <property name="wrapping">
-                 <bool>true</bool>
-                </property>
-               </widget>
+               <layout class="QVBoxLayout" name="verticalLayout_4"/>
               </item>
              </layout>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_4"/>
             </item>
            </layout>
           </item>
          </layout>
-        </item>
-       </layout>
+        </widget>
+        <widget class="QWidget" name="page">
+         <widget class="QGraphicsView" name="graphicsView">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>31</y>
+            <width>721</width>
+            <height>641</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
+       </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_21">
+       <layout class="QVBoxLayout" name="verticalLayoutControlSliders">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_33">
           <item>
@@ -1034,8 +1057,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>834</width>
-     <height>20</height>
+     <width>965</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCalls">
@@ -1085,6 +1108,7 @@
    <addaction name="actionDisconnect"/>
    <addaction name="actionConfigure"/>
    <addaction name="actionClear"/>
+   <addaction name="actionViewCharts"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionConnect">
@@ -1140,6 +1164,18 @@
    </property>
    <property name="text">
     <string>Open hex file...</string>
+   </property>
+  </action>
+  <action name="actionViewCharts">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="terminal.qrc">
+     <normaloff>:/images/images/charts.png</normaloff>:/images/images/charts.png</iconset>
+   </property>
+   <property name="text">
+    <string>ViewCharts</string>
    </property>
   </action>
  </widget>
