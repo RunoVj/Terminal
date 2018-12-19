@@ -69,10 +69,10 @@ void MainWindow::initActionsConnections()
             [this](bool checked)
     {
         if (!checked) {
-            ui->TerminalStackWidget->setCurrentWidget(ui->TerminalWidget);
+            ui->TerminalStackWidget->setCurrentWidget(ui->terminalWidget);
         }
         else {
-            ui->TerminalStackWidget->setCurrentWidget(ui->page);
+            ui->TerminalStackWidget->setCurrentWidget(ui->charts);
         }
     });
 

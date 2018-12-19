@@ -27,17 +27,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    chartswidget.cpp
 
 HEADERS += \
     mainwindow.h \
     settingsdialog.h \
-    messages.h
+    messages.h \
+    chartswidget.h
 
 FORMS += \
     mainwindow.ui \
     settingsdialog.ui \
-    settingsdialog.ui
+    settingsdialog.ui \
+    chartswidget.ui
 
 RESOURCES += \
     terminal.qrc
