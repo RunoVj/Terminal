@@ -64,19 +64,18 @@ void ChartsWidget::add_current_data(double value)
 void ChartsWidget::add_pwm_data(int8_t value)
 {
     static int prev_value, dt, count, dt_sum;
-    dt = _time_ptr->elapsed()/10 - prev_value;
-    prev_value = _time_ptr->elapsed()/10;
+    dt = _time_ptr->elapsed() - prev_value;
+    prev_value = _time_ptr->elapsed();
     qDebug() << "Added new pwm data: " << value
              << "\nTime: " << prev_value
              << "\ndt: " << dt;
 
-    pwm_list.push_back(QPointF(prev_value, value));
+    pwm_list.push_back(QPointF(prev_value/10, value));
     ++count;
     dt_sum += dt;
     if (count == 10) {
         count = 0;
         dt_sum = 0;
-        _line_series_ptr->clear();
         *_line_series_ptr << pwm_list;
         pwm_list.clear();
         _chart_ptr->scroll(dt_sum, 0);
