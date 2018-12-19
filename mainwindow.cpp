@@ -65,14 +65,14 @@ void MainWindow::initActionsConnections()
             [this](void){ui->plainTextEditTransmit->clear();});
     connect(ui->actionOpenHexFile, &QAction::triggered,
             this, &MainWindow::open_hex);
-    connect(ui->actionViewCharts, &QAction::triggered,
+    connect(ui->actionViewChart, &QAction::triggered,
             [this](bool checked)
     {
         if (!checked) {
             ui->TerminalStackWidget->setCurrentWidget(ui->terminalWidget);
         }
         else {
-            ui->TerminalStackWidget->setCurrentWidget(ui->charts);
+            ui->TerminalStackWidget->setCurrentWidget(ui->chart);
         }
     });
 
@@ -149,6 +149,12 @@ void MainWindow::initActionsConnections()
     connect(ui->checkBoxUpdateCorrection, &QCheckBox::stateChanged,
             this, &MainWindow::allow_correction);
 
+    // chart connections
+    connect(this, &MainWindow::enable_chart_plotting,
+            ui->chart, &ChartsWidget::enable_plotting);
+    connect(this, &MainWindow::send_pwm_data,
+            ui->chart, &ChartsWidget::add_pwm_data);
+
 }
 
 void MainWindow::openSerialPort()
@@ -176,6 +182,7 @@ void MainWindow::openSerialPort()
     }
 
     ui->comboBoxCommunicationPeriod->setEnabled(false);
+    emit enable_chart_plotting(true);
 }
 
 void MainWindow::closeSerialPort()
@@ -189,11 +196,13 @@ void MainWindow::closeSerialPort()
     _send_timer->stop();
 
     ui->comboBoxCommunicationPeriod->setEnabled(true);
+    emit enable_chart_plotting(false);
 }
 
 void MainWindow::writeData(const QByteArray &data)
 {
     serial->write(data);
+    emit send_pwm_data(ui->verticalSliderVelocity->value());
 }
 
 void MainWindow::request()
@@ -494,11 +503,6 @@ void MainWindow::showStatusMessage(const QString &message)
 void MainWindow::on_verticalSliderVelocity_valueChanged(int value)
 {
     _pwm_duty = value;
-}
-
-void MainWindow::on_verticalSliderPosition_valueChanged(int value)
-{
-    _position = value;
 }
 
 void MainWindow::on_verticalSliderFrequency_valueChanged(int value)

@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QtCharts>
-#include <QSplineSeries>
+#include <QLineSeries>
 #include <QDebug>
 
 namespace Ui {
@@ -24,12 +24,15 @@ private:
     QChartView *_chart_view_ptr;
     QValueAxis *_x_axis_ptr;
     QValueAxis *_y_axis_ptr;
-    QLineSeries *_line_series_ptr;
+    QSplineSeries  *_line_series_ptr;
+
+    QTime *_time_ptr;
+    QList<QPointF> pwm_list;
 
 signals:
 
 public slots:
-    void start_timer(bool start);
+    void enable_plotting(bool enable);
     void add_current_data(double value);
     void add_pwm_data(int8_t value);
     void add_speed_data(uint16_t value);

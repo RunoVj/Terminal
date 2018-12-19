@@ -1149,22 +1149,22 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
                       </widget>
                      </item>
                      <item>
+                      <widget class="QSpinBox" name="spinBoxStressTestDuration">
+                       <property name="minimum">
+                        <number>60</number>
+                       </property>
+                       <property name="maximum">
+                        <number>600</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
                       <widget class="QSpinBox" name="spinBoxStressFrequency">
                        <property name="minimum">
                         <number>1</number>
                        </property>
                        <property name="maximum">
                         <number>50</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QSpinBox" name="spinBoxStressTestDuration">
-                       <property name="minimum">
-                        <number>30</number>
-                       </property>
-                       <property name="maximum">
-                        <number>60</number>
                        </property>
                       </widget>
                      </item>
@@ -1396,7 +1396,7 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
           </item>
          </layout>
         </widget>
-        <widget class="ChartsWidget" name="charts"/>
+        <widget class="ChartsWidget" name="chart"/>
        </widget>
       </item>
       <item>
@@ -1585,7 +1585,7 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
    <addaction name="actionDisconnect"/>
    <addaction name="actionConfigure"/>
    <addaction name="actionClear"/>
-   <addaction name="actionViewCharts"/>
+   <addaction name="actionViewChart"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionConnect">
@@ -1643,7 +1643,7 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
     <string>Open hex file...</string>
    </property>
   </action>
-  <action name="actionViewCharts">
+  <action name="actionViewChart">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1652,7 +1652,10 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
      <normaloff>:/images/images/charts.png</normaloff>:/images/images/charts.png</iconset>
    </property>
    <property name="text">
-    <string>ViewCharts</string>
+    <string>ViewChart</string>
+   </property>
+   <property name="toolTip">
+    <string>ViewChart</string>
    </property>
   </action>
  </widget>

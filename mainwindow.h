@@ -57,6 +57,10 @@ private:
 
     QVector<QByteArray> _firmware;
 
+signals:
+    void enable_chart_plotting(bool enable);
+    void send_pwm_data(int8_t value);
+
 private slots:
     void openSerialPort();
     void closeSerialPort();
