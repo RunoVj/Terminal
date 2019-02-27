@@ -50,7 +50,7 @@ private:
 
     uint16_t _firm_req_index;
 
-    uint8_t _pwm_duty;
+    int8_t _velocity;
     uint8_t _position;
     uint8_t _period;
     bool _position_setting;

@@ -20,8 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _position_setting = 0;
     _position = 0;
-    _pwm_duty = ui->verticalSliderVelocity->value();
-    _period = ui->verticalSliderFrequency->value();
+    _velocity = static_cast<int8_t>(ui->verticalSliderVelocity->value());
+    _period = static_cast<uint8_t>(ui->verticalSliderFrequency->value());
     _cur_mes_type = _next_mes_type = NORMAL_REQUEST_TYPE;
     _firmware.clear();
     _firm_req_index = 0;
@@ -106,7 +106,7 @@ void MainWindow::initActionsConnections()
             [this](int value)
     {
         ui->dialAngle->setValue(value);
-        _position = value;
+        _position = static_cast<uint8_t>(value);
     });
     connect(ui->spinBoxOutrunningAngle,
             static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
@@ -213,6 +213,9 @@ void MainWindow::request()
     else if (ui->radioButtonTerminalRequest->isChecked()) {
         _next_mes_type = TERMINAL_REQUEST_TYPE;
     }
+    else if (ui->radioButtonDeviceRequest->isChecked()) {
+        _next_mes_type = DEVICE_REQUEST_TYPE;
+    }
 
     // fill request structure
     if (_next_mes_type == NORMAL_REQUEST_TYPE) {
@@ -221,14 +224,14 @@ void MainWindow::request()
         req.AA = 0xAA;
         req.type = NORMAL_REQUEST_TYPE;
         if (ui->checkBoxCircleMode->isChecked()) {
-            req.address = ui->spinBoxCurrentAddress->value();
+            req.address = static_cast<uint8_t>(ui->spinBoxCurrentAddress->value());
             uint8_t next_addr = (ui->spinBoxCurrentAddress->value() + 1) % 9;
             ui->spinBoxCurrentAddress->setValue(next_addr);
         }
         else {
-            req.address = ui->spinBoxCurrentAddress->value();
+            req.address = static_cast<uint8_t>(ui->spinBoxCurrentAddress->value());
         }
-        req.velocity = ui->verticalSliderVelocity->value();
+        req.velocity = static_cast<int8_t>(ui->verticalSliderVelocity->value());
         stream << req;
     }
     else if (_next_mes_type == TERMINAL_REQUEST_TYPE) {
@@ -238,28 +241,28 @@ void MainWindow::request()
         req.AA = 0xAA;
         req.type = TERMINAL_REQUEST_TYPE;
         if (ui->checkBoxCircleMode->isChecked()) {
-            req.address = ui->spinBoxCurrentAddress->value();
+            req.address = static_cast<uint8_t>(ui->spinBoxCurrentAddress->value());
             uint8_t next_addr = (ui->spinBoxCurrentAddress->value() + 1) % 9;
             ui->spinBoxCurrentAddress->setValue(next_addr);
         }
         else {
-            req.address = ui->spinBoxCurrentAddress->value();
+            req.address = static_cast<uint8_t>(ui->spinBoxCurrentAddress->value());
         }
         req.update_base_vector = ui->checkBoxUpdateBaseVector->isChecked();
         req.position_setting = ui->radioButtonPosition->isChecked();
-        req.angle = ui->dialAngle->value();
-        req.velocity = ui->verticalSliderVelocity->value();
-        req.frequency = ui->verticalSliderFrequency->value();
+        req.angle = static_cast<uint8_t>(ui->dialAngle->value());
+        req.velocity = static_cast<int8_t>(ui->verticalSliderVelocity->value());
+        req.frequency = static_cast<uint8_t>(ui->verticalSliderFrequency->value());
 
-        req.outrunning_angle = ui->dialOutrunningAngle->value();
+        req.outrunning_angle = static_cast<int16_t>(ui->dialOutrunningAngle->value());
         req.update_base_vector = ui->checkBoxUpdateBaseVector->isChecked();
 
         req.update_speed_k = ui->checkBoxUpdateCorrection->isChecked();
         if (req.velocity > 0) {
-            req.speed_k = ui->spinBoxClockwiseK->value();
+            req.speed_k = static_cast<uint16_t>(ui->spinBoxClockwiseK->value());
         }
         else {
-            req.speed_k = ui->spinBoxCounterclockwiseK->value();
+            req.speed_k = static_cast<uint16_t>(ui->spinBoxCounterclockwiseK->value());
         }
         // move to QByteArray
         stream << req;
@@ -273,12 +276,12 @@ void MainWindow::request()
         conf_req.type = CONFIG_REQUEST_TYPE;
         conf_req.update_firmware = ui->checkBoxUpdateFirmware->isChecked();
         conf_req.forse_setting = ui->checkBoxForceSettingAddress->isChecked();
-        conf_req.new_address = ui->spinBoxSetAddress->value();
+        conf_req.new_address = static_cast<uint8_t>(ui->spinBoxSetAddress->value());
         if (conf_req.forse_setting) {
             conf_req.old_address = 0;
         }
         else {
-            conf_req.old_address = ui->spinBoxCurrentAddress->value();
+            conf_req.old_address = static_cast<uint8_t>(ui->spinBoxCurrentAddress->value());
         }
 
         conf_req.high_threshold = static_cast<uint16_t>(
@@ -289,8 +292,8 @@ void MainWindow::request()
                     ui->lineEditCurrentAverageThreshold->text().toInt());
 
         conf_req.update_correction = ui->checkBoxUpdateCorrection->isChecked();
-        conf_req.clockwise_speed_k = ui->spinBoxClockwiseK->value();
-        conf_req.counterclockwise_speed_k = ui->spinBoxCounterclockwiseK->value();
+        conf_req.clockwise_speed_k = static_cast<uint16_t>(ui->spinBoxClockwiseK->value());
+        conf_req.counterclockwise_speed_k = static_cast<uint16_t>(ui->spinBoxCounterclockwiseK->value());
 
         // move to QByteArray
         stream << conf_req;
@@ -314,7 +317,7 @@ void MainWindow::request()
 
         firmware_req.AA = 0xAA;
         firmware_req.type = FIRMWARE_REQUEST_TYPE;
-        firmware_req.address = ui->spinBoxCurrentAddress->value();
+        firmware_req.address = static_cast<uint8_t>(ui->spinBoxCurrentAddress->value());
         firmware_req.force_update = ui->checkBoxForceSettingAddress->isChecked();
         firmware_req.get_response = ui->checkBoxSendResponse->isChecked();
         firmware_req.index = _firm_req_index;
@@ -328,6 +331,20 @@ void MainWindow::request()
             _firm_req_index = 0;
         }
         stream << firmware_req;
+    }
+
+    else if (_next_mes_type == DEVICE_REQUEST_TYPE) {
+        _cur_mes_type = DEVICE_REQUEST_TYPE;
+
+        DevicesRequest req;
+        req.AA1 = 0xAA;
+        req.AA2 = 0xAA;
+        req.address = req.address = static_cast<uint8_t>(ui->spinBoxCurrentAddress->value());
+        req.setting = 0x00;
+        req.velocity1 = static_cast<uint8_t>(_velocity);
+        req.velocity2 = static_cast<uint8_t>(_period);
+        // move to QByteArray
+        stream << req;
     }
 
     // calculate CRC
@@ -441,6 +458,25 @@ void MainWindow::readData()
             ++_firm_req_index;
         }
     }
+    else if (_cur_mes_type == DEVICE_REQUEST_TYPE) {
+        struct DevicesResponse resp;
+
+        stream >> resp;
+
+        if (resp.CRC == crc) {
+            ui->lineEditAddress->setText(QString::number(resp.address));
+            float current_in_amp = (resp.current1 - MAX_CURRENT/2)/CURRENT_COEF;
+            ui->lineEditCurrent->setText(QString::number(current_in_amp, 'f', 3)
+                                         + " A (" + QString::number(
+                                             resp.current1) + " ADC)");
+
+            ui->lineEditSpeedPeriod->setText(QString::number(resp.velocity1));
+            ui->lineEditGrayCode->setText(QString::number(resp.velocity2));
+        }
+        else {
+            ui->plainTextEditReceive->appendPlainText(QString("Incorrect CRC"));
+        }
+    }
 }
 
 void MainWindow::open_hex()
@@ -493,17 +529,17 @@ void MainWindow::showStatusMessage(const QString &message)
 
 void MainWindow::on_verticalSliderVelocity_valueChanged(int value)
 {
-    _pwm_duty = value;
+    _velocity = static_cast<int8_t>(value);
 }
 
 void MainWindow::on_verticalSliderPosition_valueChanged(int value)
 {
-    _position = value;
+    _position = static_cast<uint8_t>(value);
 }
 
 void MainWindow::on_verticalSliderFrequency_valueChanged(int value)
 {
-    _period = value;
+    _period = static_cast<uint8_t>(value);
 }
 
 void MainWindow::disable_current_thresholds(bool enable_thresholds)

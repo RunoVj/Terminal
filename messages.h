@@ -16,6 +16,7 @@
 #define TERMINAL_REQUEST_TYPE               0x02
 #define CONFIG_REQUEST_TYPE                 0x03
 #define FIRMWARE_REQUEST_TYPE               0x04
+#define DEVICE_REQUEST_TYPE                 0x05
 
 /* STM send requests and VMA send responses */
 struct Request
@@ -364,6 +365,81 @@ struct FirmwareResponse
         ds >> resp.address;
         ds >> resp.status;
         ds >> resp.index;
+        ds >> resp.CRC;
+        return ds;
+    }
+};
+
+struct DevicesRequest
+{
+    uint8_t AA1;
+    uint8_t AA2;
+    uint8_t address;
+    uint8_t setting;
+    uint8_t velocity1;
+    uint8_t velocity2;
+    uint8_t CRC;
+
+    friend QDataStream& operator<<(QDataStream &ds, const DevicesRequest &req)
+    {
+        ds.setByteOrder(QDataStream::LittleEndian);
+        ds << req.AA1;
+        ds << req.AA2;
+        ds << req.address;
+        ds << req.setting;
+        ds << req.velocity1;
+        ds << req.velocity2;
+        return ds;
+    }
+
+    friend QDataStream& operator>>(QDataStream &ds, DevicesRequest &req)
+    {
+        ds.setByteOrder(QDataStream::LittleEndian);
+        ds >> req.AA1;
+        ds >> req.AA2;
+        ds >> req.address;
+        ds >> req.setting;
+        ds >> req.velocity1;
+        ds >> req.velocity2;
+        ds >> req.CRC;
+        return ds;
+    }
+};
+
+struct DevicesResponse
+{
+    uint8_t AA;
+    uint8_t address;
+    uint8_t errors;
+    uint16_t current1;
+    uint16_t current2;
+    uint8_t velocity1;
+    uint8_t velocity2;
+    uint8_t CRC;
+
+    friend QDataStream& operator<<(QDataStream &ds, const DevicesResponse &resp)
+    {
+        ds.setByteOrder(QDataStream::LittleEndian);
+        ds << resp.AA;
+        ds << resp.address;
+        ds << resp.errors;
+        ds << resp.current1;
+        ds << resp.current2;
+        ds << resp.velocity1;
+        ds << resp.velocity2;
+        return ds;
+    }
+
+    friend QDataStream& operator>>(QDataStream &ds, DevicesResponse &resp)
+    {
+        ds.setByteOrder(QDataStream::LittleEndian);
+        ds >> resp.AA;
+        ds >> resp.address;
+        ds >> resp.errors;
+        ds >> resp.current1;
+        ds >> resp.current2;
+        ds >> resp.velocity1;
+        ds >> resp.velocity2;
         ds >> resp.CRC;
         return ds;
     }
