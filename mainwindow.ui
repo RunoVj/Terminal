@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>965</width>
-    <height>824</height>
+    <height>832</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1233,6 +1233,13 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
                   </widget>
                  </item>
                  <item>
+                  <widget class="QCheckBox" name="checkBoxCrc1Byte">
+                   <property name="text">
+                    <string>Include first byte in CRC</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QCheckBox" name="checkBoxSendResponse">
                    <property name="toolTip">
                     <string>Enable during firmware update</string>
@@ -1467,7 +1474,7 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
            <item>
             <widget class="QSlider" name="verticalSliderVelocity">
              <property name="minimum">
-              <number>-128</number>
+              <number>-127</number>
              </property>
              <property name="maximum">
               <number>127</number>
@@ -1679,7 +1686,7 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroupRequestType"/>
   <buttongroup name="buttonGroupGrayCode"/>
+  <buttongroup name="buttonGroupRequestType"/>
  </buttongroups>
 </ui>

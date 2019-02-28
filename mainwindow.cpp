@@ -339,7 +339,16 @@ void MainWindow::request()
         DevicesRequest req;
         req.AA1 = 0xAA;
         req.AA2 = 0xAA;
-        req.address = req.address = static_cast<uint8_t>(ui->spinBoxCurrentAddress->value());
+
+        if (ui->checkBoxCircleMode->isChecked()) {
+            req.address = static_cast<uint8_t>(ui->spinBoxCurrentAddress->value());
+            uint8_t next_addr = (ui->spinBoxCurrentAddress->value() + 1) % 9;
+            ui->spinBoxCurrentAddress->setValue(next_addr);
+        }
+        else {
+            req.address = static_cast<uint8_t>(ui->spinBoxCurrentAddress->value());
+        }
+
         req.setting = 0x00;
         req.velocity1 = static_cast<uint8_t>(_velocity);
         req.velocity2 = static_cast<uint8_t>(_period);
@@ -350,10 +359,19 @@ void MainWindow::request()
     // calculate CRC
     uint8_t crc = 0;
 
-    // 0xAA doesn't include in CRC calculation
-    for (int i = 1; i < msg_buf.size(); i++){
-        crc ^= msg_buf[i];
+    if (ui->checkBoxCrc1Byte->isChecked()) {
+        for (int i = 0; i < msg_buf.size(); i++){
+            crc ^= msg_buf[i];
+        }
     }
+    else {
+        // 0xAA doesn't include in CRC calculation
+        for (int i = 1; i < msg_buf.size(); i++){
+            crc ^= msg_buf[i];
+        }
+    }
+
+
     stream << crc;
 
     ui->plainTextEditTransmit->appendPlainText(msg_buf.toHex().toUpper());
@@ -383,9 +401,16 @@ void MainWindow::readData()
     // calculate CRC
     uint8_t crc = 0;
 
-    // 0xAA doesn't include in CRC calculation
-    for (int i = 1; i < data.size() - 1; i++){
-        crc ^= data[i];
+    if (ui->checkBoxCrc1Byte->isChecked()) {
+        for (int i = 0; i < data.size() - 1; i++){
+            crc ^= data[i];
+        }
+    }
+    else {
+        // 0xAA doesn't include in CRC calculation
+        for (int i = 1; i < data.size() - 1; i++){
+            crc ^= data[i];
+        }
     }
 
     if (_cur_mes_type == NORMAL_REQUEST_TYPE) {
@@ -454,7 +479,6 @@ void MainWindow::readData()
             _next_mes_type = NORMAL_REQUEST_TYPE;
         }
         else {
-            qDebug() << "okkkk";
             ++_firm_req_index;
         }
     }
