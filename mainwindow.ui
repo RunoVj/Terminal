@@ -607,7 +607,7 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
                       <string/>
                      </property>
                      <property name="checkable">
-                      <bool>false</bool>
+                      <bool>true</bool>
                      </property>
                      <property name="autoExclusive">
                       <bool>false</bool>
@@ -626,7 +626,7 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
                       <string/>
                      </property>
                      <property name="checkable">
-                      <bool>false</bool>
+                      <bool>true</bool>
                      </property>
                      <property name="autoExclusive">
                       <bool>false</bool>
@@ -648,7 +648,7 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
                       <string/>
                      </property>
                      <property name="checkable">
-                      <bool>false</bool>
+                      <bool>true</bool>
                      </property>
                      <property name="autoExclusive">
                       <bool>false</bool>
@@ -1686,7 +1686,11 @@ QCheckBox::indicator:disabled, QRadioButton::indicator:disabled
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroupGrayCode"/>
+  <buttongroup name="buttonGroupGrayCode">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
   <buttongroup name="buttonGroupRequestType"/>
  </buttongroups>
 </ui>

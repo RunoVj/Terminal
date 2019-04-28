@@ -449,9 +449,12 @@ void MainWindow::readData()
 
             ui->lineEditState->setText(QString::number(resp.state));
 
-            ui->radioButtonSensorA->setDown(resp.position_code & 0b00000001);
-            ui->radioButtonSensorB->setDown(resp.position_code & 0b00000010);
-            ui->radioButtonSensorC->setDown(resp.position_code & 0b00000100);
+            ui->radioButtonSensorA->setChecked(
+                        static_cast<bool>(resp.position_code & 0b00000001));
+            ui->radioButtonSensorB->setChecked(
+                        static_cast<bool>(resp.position_code & 0b00000010));
+            ui->radioButtonSensorC->setChecked(
+                        static_cast<bool>(resp.position_code & 0b00000100));
 
             ui->lineEditSpeedPeriod->setText(QString::number(resp.speed_period));
 
