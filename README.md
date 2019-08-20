@@ -1,2 +1,2 @@
 # Terminal
-VCP terminal in QT
+Virtual COM port terminal in QT with custom protocol
